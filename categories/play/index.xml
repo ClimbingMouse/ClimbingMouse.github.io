@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>blog on Climbing Mouse</title>
-        <link>https://ClimbingMouse.github.io/categories/blog/</link>
-        <description>Recent content in blog on Climbing Mouse</description>
+        <title>play on Climbing Mouse</title>
+        <link>https://ClimbingMouse.github.io/categories/play/</link>
+        <description>Recent content in play on Climbing Mouse</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Thu, 22 Jun 2023 21:14:20 +0800</lastBuildDate><atom:link href="https://ClimbingMouse.github.io/categories/blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 22 Jun 2023 21:14:20 +0800</lastBuildDate><atom:link href="https://ClimbingMouse.github.io/categories/play/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>甘坑古镇</title>
         <link>https://ClimbingMouse.github.io/p/blog/</link>
         <pubDate>Thu, 22 Jun 2023 21:14:20 +0800</pubDate>
