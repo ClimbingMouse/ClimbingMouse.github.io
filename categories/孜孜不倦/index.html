@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://ClimbingMouse.github.io/categories/%E5%AD%9C%E5%AD%9C%E4%B8%8D%E5%80%A6/'>
 
-<link rel="stylesheet" href="/scss/style.min.c265895fe7ac9cfe793d40686bc4669b20d8e16661124c18a3fc2d1c7c89548e.css"><meta property='og:title' content='Category: 孜孜不倦 - Climbing Mouse'>
+<link rel="stylesheet" href="/scss/style.min.7bb22b9f9492214b3303fc9424b88359ff731f8d57184e42afe203b60ff3be27.css"><meta property='og:title' content='Category: 孜孜不倦 - Climbing Mouse'>
 <meta property='og:description' content='孜孜不倦'>
 <meta property='og:url' content='https://ClimbingMouse.github.io/categories/%E5%AD%9C%E5%AD%9C%E4%B8%8D%E5%80%A6/'>
 <meta property='og:site_name' content='Climbing Mouse'>
@@ -437,6 +437,11 @@
     <a href="/p/%E6%8A%98%E8%85%BE/">
         <div class="article-details">
             <h2 class="article-title">忆光75</h2>
+            
+            <div class="article-subtitle">
+                周六了，和室友出去耍耍
+            </div>
+            
             <footer class="article-time">
                 <time datetime='2023-06-22T21:14:20&#43;08:00'>Jun 22, 2023</time>
             </footer>
@@ -465,6 +470,12 @@
             <image src="/photos/footer.png" /> <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
         主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+
+    
+<section class="running-time">
+    本博客已稳定运行
+    <span id="runningdays" class="running-days"></span>
     </section>
 
     <script>
@@ -501,5 +512,27 @@
     }());
 </script>
 
+<script>
+    let s1 = '2022-5-18'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+
+<script>
+    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+
+    ChannelIO('boot', {
+        "pluginKey": "2146d6fe-a6cc-4cc5-9a2b-e32a1c35ff0a"
+    });
+</script>
     </body>
 </html>
