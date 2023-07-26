@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='分布式事务 Seata'>
+<title>分布式事务 Seata</title>
+
+<link rel='canonical' href='https://ClimbingMouse.github.io/p/seata/'>
+
+<link rel="stylesheet" href="/scss/style.min.77ac831217b9eb199ba44c6be8488042c9d80a277095efd18ee2d04ab3b8d4a1.css"><meta property='og:title' content='分布式事务 Seata'>
+<meta property='og:description' content='分布式事务 Seata'>
+<meta property='og:url' content='https://ClimbingMouse.github.io/p/seata/'>
+<meta property='og:site_name' content='Climbing Mouse'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='事务' /><meta property='article:published_time' content='2023-06-11T23:36:20&#43;08:00'/><meta property='article:modified_time' content='2023-06-11T23:36:20&#43;08:00'/>
+<meta name="twitter:title" content="分布式事务 Seata">
+<meta name="twitter:description" content="分布式事务 Seata">
+    <link rel="shortcut icon" href="/photos/avatar.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-top"></div>
+            <div class="loader-section section-bottom"></div>
+        </div>
+        <script type="text/javascript">
+            window.onload = function () { document.body.className += ' loaded'; };
+            window.setTimeout(function () { document.body.className += ' loaded'; }, 1500);
+        </script>
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu5d42b4a30f5f0f53f62b35398df5af58_5026_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌈</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Climbing Mouse</a></h1>
+            <h2 class="site-description">疾风起，不言弃💪</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://travellings.link/'
+                        
+                        title="aTravelling"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-train" width="44" height="44" viewBox="0 0 24 24" stroke-width="0.5" stroke="#2c3e51" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M21 13c0 -3.87 -3.37 -7 -10 -7h-8" />
+  <path d="M3 15h16a2 2 0 0 0 2 -2" />
+  <path d="M3 6v5h17.5" />
+  <path d="M3 10l0 4" />
+  <path d="M8 11l0 -5" />
+  <path d="M13 11l0 -4.5" />
+  <path d="M3 19l18 0" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.foreverblog.cn/go.html'
+                        
+                        title="aWormhole"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1689391208904" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="39349" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M656 43.2h-30.4C614.4 17.6 584 0 555.2 0h-84.8c-30.4 0-59.2 17.6-72 43.2h-33.6c-128 0-233.6 105.6-233.6 233.6v510.4c0 33.6 30.4 64 64 64h51.2L176 952c-12.8 20.8-8 46.4 12.8 59.2 8 4.8 17.6 8 25.6 8 12.8 0 25.6-8 33.6-17.6l97.6-148.8h336l92.8 148.8c8 12.8 20.8 20.8 33.6 20.8 8 0 17.6 0 20.8-8 20.8-12.8 25.6-38.4 12.8-59.2l-64-105.6h51.2c33.6 0 64-30.4 64-64V276.8c1.6-128-104-233.6-236.8-233.6zM468.8 297.6v128H214.4v-128h254.4z m86.4 0h254.4v128H555.2v-128zM363.2 128h33.6c12.8 25.6 43.2 43.2 72 43.2h84.8c30.4 0 59.2-17.6 72-43.2H656c59.2 0 110.4 33.6 136 84.8h-560C252.8 161.6 304 128 363.2 128z m-148.8 636.8V510.4h595.2v254.4H214.4z" p-id="39350" fill="#bfbfbf"></path><path d="M342.4 636.8m-84.8 0a84.8 84.8 0 1 0 169.6 0 84.8 84.8 0 1 0-169.6 0Z" p-id="39351" fill="#bfbfbf"></path><path d="M681.6 636.8m-84.8 0a84.8 84.8 0 1 0 169.6 0 84.8 84.8 0 1 0-169.6 0Z" p-id="39352" fill="#bfbfbf"></path></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='/index.xml'
+                        target="_blank"
+                        title="cRSS"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1689391247524" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="40418" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M554.666667 896c-25.6 0-42.666667-17.066667-42.666667-42.666667 0-187.733333-153.6-341.333333-341.333333-341.333333-25.6 0-42.666667-17.066667-42.666667-42.666667s17.066667-42.666667 42.666667-42.666666c234.666667 0 426.666667 192 426.666666 426.666666 0 25.6-17.066667 42.666667-42.666666 42.666667z" p-id="40419" fill="#bfbfbf"></path><path d="M853.333333 896c-25.6 0-42.666667-17.066667-42.666666-42.666667 0-354.133333-285.866667-640-640-640-25.6 0-42.666667-17.066667-42.666667-42.666666s17.066667-42.666667 42.666667-42.666667c401.066667 0 725.333333 324.266667 725.333333 725.333333 0 25.6-17.066667 42.666667-42.666667 42.666667z" p-id="40420" fill="#bfbfbf"></path><path d="M213.333333 810.666667m-85.333333 0a85.333333 85.333333 0 1 0 170.666667 0 85.333333 85.333333 0 1 0-170.666667 0Z" p-id="40421" fill="#bfbfbf"></path></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/ClimbingMouse'
+                        target="_blank"
+                        title="dGitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1689391441244" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41512" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M682.215454 981.446137c-25.532318 0-42.553863-17.021545-42.553864-42.553864v-165.960067c4.255386-34.043091-8.510773-59.575409-29.787704-80.852341-12.766159-12.766159-17.021545-29.787704-8.510773-42.553864 4.255386-17.021545 21.276932-25.532318 34.043091-29.787704 123.406204-12.766159 238.301635-55.320023 238.301635-255.323181 0-46.80925-17.021545-93.6185-51.064636-131.916976-12.766159-12.766159-12.766159-29.787704-8.510772-42.553864 12.766159-34.043091 12.766159-68.086182 4.255386-102.129272-21.276932 4.255386-55.320023 17.021545-110.640045 55.320022-8.510773 8.510773-21.276932 8.510773-34.043091 4.255387-89.363113-25.532318-187.236999-25.532318-276.600112 0-12.766159 4.255386-25.532318 4.255386-38.298477-4.255387C307.741455 104.836549 269.442978 92.07039 248.166047 87.815004c-8.510773 34.043091-8.510773 68.086182 4.255386 102.129272 4.255386 17.021545 4.255386 34.043091-8.510773 42.553864-34.043091 38.298477-51.064636 85.107727-51.064636 131.916976 0 200.003158 114.895431 242.557022 238.301635 255.323181 17.021545 0 29.787704 12.766159 34.043091 29.787704 4.255386 17.021545 0 34.043091-8.510773 42.553864-21.276932 21.276932-29.787704 46.80925-29.787704 76.596954v165.960068c0 25.532318-17.021545 42.553863-42.553863 42.553863s-42.553863-17.021545-42.553864-42.553863v-72.341568c-127.66159 21.276932-182.981613-51.064636-221.28009-97.873886-17.021545-21.276932-29.787704-38.298477-46.80925-42.553864-21.276932-4.255386-38.298477-29.787704-29.787704-51.064636 4.255386-21.276932 29.787704-38.298477 51.064636-29.787704 42.553863 12.766159 68.086182 42.553863 93.6185 72.341568 34.043091 46.80925 63.830795 80.852341 153.193908 63.830795v-4.255386c0-25.532318 4.255386-55.320023 12.766159-76.596955-119.150818-25.532318-246.812408-102.129272-246.812408-327.664748 0-63.830795 21.276932-123.406204 59.575409-170.215454-17.021545-59.575409-12.766159-114.895431 12.766159-170.215454 4.255386-12.766159 12.766159-21.276932 25.532318-25.532318 17.021545-4.255386 72.341568-12.766159 187.236999 59.575409 93.6185-21.276932 191.492386-21.276932 280.855499 0 110.640045-72.341568 170.215454-63.830795 187.236999-59.575409 12.766159 4.255386 21.276932 12.766159 25.532319 25.532318 21.276932 55.320023 25.532318 110.640045 12.766159 165.960067 38.298477 46.80925 59.575409 106.384659 59.575408 170.215454 0 242.557022-144.683136 306.387817-246.812408 331.920135 8.510773 25.532318 12.766159 55.320023 12.766159 80.852341V938.892273c0 25.532318-17.021545 42.553863-42.553863 42.553864z" p-id="41513" fill="#bfbfbf"></path></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/%E5%8B%A4%E8%83%BD%E8%A1%A5%E6%8B%99/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="44" height="44" viewBox="0 0 24 24" stroke-width="1" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+  <path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+  <path d="M5 8h4" />
+  <path d="M9 16h4" />
+  <path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z" />
+  <path d="M14 9l4 -1" />
+  <path d="M16 16l3.923 -.98" />
+</svg>
+                
+                <span>学习</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>朋友们</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                <form action="/search/" class="search-form widget" >
+        <p>
+            <label>搜索</label>
+            <input name="keyword" required placeholder="输入关键词..." />
+        
+            <button title="搜索">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+            
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#本地事务">本地事务</a></li>
+    <li><a href="#分布式事务-1">分布式事务</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#cap-定理">CAP 定理</a>
+      <ol>
+        <li><a href="#一致性">一致性</a></li>
+        <li><a href="#可用性">可用性</a></li>
+        <li><a href="#分区容错">分区容错</a></li>
+        <li><a href="#矛盾">矛盾</a></li>
+      </ol>
+    </li>
+    <li><a href="#base-理论">BASE 理论</a></li>
+    <li><a href="#解决分布式事务问题的思路">解决分布式事务问题的思路</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#相关术语">相关术语</a></li>
+    <li><a href="#微服务集成-seata">微服务集成 Seata</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#xa-模式">XA 模式</a>
+      <ol>
+        <li><a href="#两阶段提交">两阶段提交</a></li>
+        <li><a href="#seata-的-xa-模型">Seata 的 XA 模型</a></li>
+        <li><a href="#优缺点">优缺点</a></li>
+        <li><a href="#实现-xa-模式">实现 XA 模式</a></li>
+      </ol>
+    </li>
+    <li><a href="#at-模式">AT 模式</a>
+      <ol>
+        <li><a href="#seata-的-at-模型">Seata 的 AT 模型</a></li>
+        <li><a href="#at-与-xa-的区别">AT 与 XA 的区别</a></li>
+        <li><a href="#脏写问题">脏写问题</a></li>
+        <li><a href="#at-模式优缺点">AT 模式优缺点</a></li>
+        <li><a href="#实现-at-模式">实现 AT 模式</a></li>
+      </ol>
+    </li>
+    <li><a href="#tcc-模式">TCC 模式</a>
+      <ol>
+        <li><a href="#流程分析">流程分析</a></li>
+        <li><a href="#seata-的--tcc-模型">Seata 的  TCC 模型</a></li>
+        <li><a href="#tcc-模式优缺点">TCC 模式优缺点</a></li>
+        <li><a href="#事务悬挂和空回滚">事务悬挂和空回滚</a>
+          <ol>
+            <li><a href="#空回滚">空回滚</a></li>
+            <li><a href="#业务悬挂">业务悬挂</a></li>
+          </ol>
+        </li>
+        <li><a href="#实现-tcc-模式">实现 TCC 模式</a>
+          <ol>
+            <li><a href="#思路分析">思路分析</a></li>
+            <li><a href="#声明tcc接口">声明TCC接口</a></li>
+            <li><a href="#编写实现类">编写实现类</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#saga-模式">SAGA 模式</a>
+      <ol>
+        <li><a href="#原理">原理</a></li>
+        <li><a href="#442优缺点">4.4.2.优缺点</a></li>
+      </ol>
+    </li>
+    <li><a href="#45四种模式对比">4.5.四种模式对比</a></li>
+  </ol>
+</nav>
+        </div>
+
+        <a href="#" id="back-to-top"><image src="/photos/top.png"></image></a>
+    </section>
+
+
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%8B%A4%E8%83%BD%E8%A1%A5%E6%8B%99/" style="background-color: #5A8742; color: #FBFEBE;">
+                勤能补拙
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/seata/">分布式事务 Seata</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            分布式事务 Seata
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 11, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 13 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="seata-学习笔记">Seata 学习笔记</h1>
+<h1 id="分布式事务">分布式事务</h1>
+<blockquote>
+<p>单体应用被拆分成微服务应用，原来的多个模块被分成多个独立的应用，分别使用多个独立的数据源，业务操作需要调用多个服务来完成。此时<strong>每个服务内部的数据一致性由本地事务来保证</strong>，但是<strong>全局的数据一致性问题没有办法保证。</strong></p>
+</blockquote>
+<p><strong>一句话总结：一次业务操作需要跨多个数据源或需要跨多个服务进行远程调用，就会产生分布式事务问题</strong></p>
+<h2 id="本地事务">本地事务</h2>
+<p>本地事务，也就是传统的<strong>单机事务</strong>。在传统数据库事务中，必须满足四个原则：</p>
+<ul>
+<li>原子性</li>
+<li>一致性</li>
+<li>隔离性</li>
+<li>持久性</li>
+</ul>
+<h2 id="分布式事务-1">分布式事务</h2>
+<p><strong>分布式事务</strong>，就是指不是在单个服务或单个数据库架构下，产生的事务，例如：</p>
+<ul>
+<li>跨数据源的分布式事务</li>
+<li>跨服务的分布式事务</li>
+<li>综合情况</li>
+</ul>
+<p>在数据库水平拆分、服务垂直拆分后，一个业务操作通常要跨多个数据库、服务才能完成。例如电商行业中比较常见的下单付款案例，包括下面几个行为：</p>
+<ul>
+<li>创建新订单</li>
+<li>扣减商品库存</li>
+<li>从用户账户余额扣除金额</li>
+</ul>
+<p>完成上面的操作需要访问三个不同的微服务和三个不同的数据库。</p>
+<image src="/photos/image-20210724165338958.png" caption="下单" >
+<blockquote>
+<p>订单的创建、库存的扣减、账户扣款在每一个服务和数据库内是一个本地事务，可以保证ACID原则。</p>
+<p>但是当我们把三件事情看做一个&quot;业务&quot;，要满足保证“业务”的原子性，要么所有操作全部成功，要么全部失败，不允许出现部分成功部分失败的现象，这就是<strong>分布式系统下的事务</strong>了。</p>
+<p>此时ACID难以满足，这是分布式事务要解决的问题</p>
+</blockquote>
+<h1 id="理论基础">理论基础</h1>
+<blockquote>
+<p>解决分布式事务问题，需要一些分布式的基础知识作为理论指导</p>
+</blockquote>
+<h2 id="cap-定理">CAP 定理</h2>
+<p>分布式系统有三个指标：</p>
+<blockquote>
+<ul>
+<li>Consistency（一致性）</li>
+<li>Avaliability（可用性）</li>
+<li>Partition tolerance（分区容错性）</li>
+</ul>
+</blockquote>
+<image src="/photos/image-20210724170517944.png" caption="CAP" >
+CAP 定理由 `Eric Brewer` 提出，他还说，这三个指标不可能同时做到。这个结论就叫做 CAP 定理。
+<h3 id="一致性">一致性</h3>
+<p><strong>Consistency（一致性）</strong>：用户访问分布式系统中的任意节点，得到的数据必须一致。</p>
+<p>比如：</p>
+<image src="/photos/image-20210724170704694.png" caption="一致性" >
+<p>当修改其中一个节点数据，两者数据产生差异：</p>
+<image src="/photos/image-20210724170735847.png" caption="破坏一致性" >
+<p>要想保证一致性，就必须实现 node1 到 node2 节点的数据同步：</p>
+<image src="/photos/image-20210724170834855.png" caption="保证一致性" >
+<h3 id="可用性">可用性</h3>
+<p><strong>Availability（可用性）</strong>：用户访问集群的任意健康节点，必须能得到响应，而不是超时或拒绝。</p>
+<p>比如，有三个节点的集群，访问任何一个都可以得到响应：</p>
+<image src="/photos/image-20210724170932072.png" caption="可用性" >
+<p>当有部分节点因为网络故障或其他原因无法访问，代表节点不可用：</p>
+<image src="/photos/image-20210724171007516.png" caption="可用性" >
+<h3 id="分区容错">分区容错</h3>
+<p><strong>Partition（分区）</strong>：因为网络故障或其他原因导致分布式系统中的部分节点与其他节点失去连接，形成独立分区。</p>
+<image src="/photos/image-20210724171041210.png" caption="分区" >
+<p><strong>Tolerance（容错）</strong>：在集群出现分区时，整个系统也要持续对外提供服务。</p>
+<h3 id="矛盾">矛盾</h3>
+<p>在分布式系统中，系统间的网络不能保证百分百健康，一定会有故障的时候，而服务又必须对外保证服务。因此 <code>Partition Tolerance</code> 不可避免。</p>
+<p>当节点接受到新的数据变更时，就会出现问题了：</p>
+<image src="/photos/image-20210724171546472.png" caption="矛盾" >
+<p>如果此时要保证<strong>一致性</strong>，就必须等待网络恢复，完成数据同步后，整个集群才对外提供服务，服务处于阻塞状态，不可用。</p>
+<p>如果此时要保证<strong>可用性</strong>，就不能等待网络恢复，那 node1、node2和 node3 之间就会出现数据不一致。</p>
+<p>也就是说，在 P 一定会出现的情况下，A 和 C 之间只能选一个。</p>
+<h2 id="base-理论">BASE 理论</h2>
+<p>BASE 理论是对 CAP 的一种解决思路，包含三个思想：</p>
+<ul>
+<li><strong>Basically Available（基本可用）</strong>：分布式系统再出现故障时，允许损失部分可用性，即保证核心可用。</li>
+<li><strong>Soft State（软状态）</strong>：在一定时间内，允许出现中间状态，比如临时的不一致状态。</li>
+<li><strong>Eventually Consistent（最终一致性）</strong>：虽然无法保证强一致性，但是在软状态结束后，最终达到数据一致。</li>
+</ul>
+<h2 id="解决分布式事务问题的思路">解决分布式事务问题的思路</h2>
+<p>分布式事务最大的问题是各个子事务的一致性问题，因此可以借鉴 CAP 定理和 BASE 理论，有两种解决思路：</p>
+<ul>
+<li>AP 模式：各子事务分别执行和提交，允许出现结果不一致，然后采用弥补措施恢复数据即可，实现最终一致。</li>
+<li>CP 模式：各个子事务执行后互相等待，同时提交，同时回滚，达成强一致。但事务等待过程中，处于若可用状态。</li>
+</ul>
+<p>但不管是哪一种模式，都需要在子系统事务之间互相通讯，协调事务状态，也就是需要一个<strong>事务协调者(TC)</strong>：</p>
+<image src="/photos/image-20210724172123567.png" caption="事务协调者" >
+<p>这里的子系统事务，成为<strong>分支事务</strong>；有关联的各个分支事务在一起成为<strong>全局事务</strong>。</p>
+<h1 id="初始-seata">初始 Seata</h1>
+<h2 id="简介">简介</h2>
+<p><strong>Seata</strong>是一款开源的分布式事务解决方案，旨在解决分布式事务场景下的数据一致性问题。Seata 提供了一系列技术手段。如 **TC（事务协调者）、TM（事务管理器）、RM（资源管理器）**等，来确保分布式事务的正确性和一致性。</p>
+<p>Seata 的工作原理是通过 TC 来协调各个 RM，实现全局事务的管理。当一个分布式事务开始时，TM 会向 TC 注册一个全局事务，然后 TC 会向各个 RM 注册分支事务。在分支事务执行完成后，RM 会将事务执行结果通知 TC，TC 会根据所有分支事务的执行结果来决定是否提交或回滚全局事务。</p>
+<p>Seata 支持多种分布式事务模式，如 AT 模式、TCC 模式、Saga 模式等。同时 Seata还提供了一些高级功能，如分布式锁、分布式 ID、分布式事务日志等，以满足不同场景下的需要：</p>
+<h2 id="相关术语">相关术语</h2>
+<p>一个典型的分布式事务过程，可以用分布式处理过程的一 ID+三组件来描述。</p>
+<p>一 ID（全局唯一的事务 ID）：Transaction ID XID，在这个事务ID下的所有事物会被统一控制。</p>
+<p>三组件：</p>
+<ul>
+<li><strong>TC（Transaction Coordinator，事务协调者）</strong>：维护全局事务的运行状态，负责协调全局事务的提交或回滚；（Server 端，为单独服务器部署）</li>
+<li><strong>TM（Transaction Manager，事务管理器）</strong>：定义全局事务的范围、开始全局事务、提交或回滚全局事务。</li>
+<li><strong>RM （Resource Manager，资源管理器）</strong>：管理分支事务处理的资源，与 TC 交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。</li>
+</ul>
+<p><strong>架构图：</strong></p>
+<image src="/photos/image-20210724172326452.png" caption="事务协调者" >
+<p>Seata 基于上述架构提供了四种不同分布式事务解决方案：</p>
+<ul>
+<li>XA 模式：强一致性分阶段事务模式，牺牲了一定的可用性，无业务侵入。</li>
+<li>TCC 模式：最终一致的分阶段事务模式，有业务侵入。</li>
+<li>AT 模式：最终一致的分阶段事务模式，无业务侵入，也是 Seata 的默认模式。</li>
+<li>SAGA 模式：长事务模式，有业务侵入。</li>
+</ul>
+<p><strong>业务侵入</strong>：我粗浅的理解为是否需要编写额外的代码。</p>
+<h2 id="微服务集成-seata">微服务集成 Seata</h2>
+<p><strong>引入依赖：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--seata--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-seata<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exclusions&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="c">&lt;!--版本较低，1.3.0，因此排除--&gt;</span> 
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;exclusion&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>seata-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>io.seata<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/exclusion&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/exclusions&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>io.seata<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>seata-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!--seata starter 采用1.4.2版本--&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>${seata.version}<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>配置TC地址</strong>：</p>
+<p>在对应服务的application.yml中，配置 TC 服务信息，通过注册中心 Nacos，结合服务名称获取 TC 地址：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">seata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="c"># TC服务注册中心的配置，微服务根据这些信息去注册中心获取tc服务地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">nacos</span><span class="w"> </span><span class="c"># 注册中心类型 nacos</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="p">:</span><span class="m">8848</span><span class="w"> </span><span class="c"># nacos地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># namespace，默认为空</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l">DEFAULT_GROUP</span><span class="w"> </span><span class="c"># 分组，默认是DEFAULT_GROUP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">application</span><span class="p">:</span><span class="w"> </span><span class="l">seata-tc-server</span><span class="w"> </span><span class="c"># seata服务名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l">nacos</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l">nacos</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tx-service-group</span><span class="p">:</span><span class="w"> </span><span class="l">seata-demo</span><span class="w"> </span><span class="c"># 事务组名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">vgroup-mapping</span><span class="p">:</span><span class="w"> </span><span class="c"># 事务组与cluster的映射关系</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">seata-demo</span><span class="p">:</span><span class="w"> </span><span class="l">SH</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>微服务如何根据这些配置寻找 TC 的地址呢？我们知道注册到 Nacos 中的微服务，确定一个具体实例需要四个信息：</p>
+<ul>
+<li>namespace：命名空间</li>
+<li>group：分组</li>
+<li>application：服务名</li>
+<li>cluster：集群名</li>
+</ul>
+<p>namespace 如果为空，则是默认的 public</p>
+<p>结合起来，TC  服务的信息就是：public@DEFAULT_GROUP@seata-server@SH，这样就能确定 TC 服务集群了。然后就可以去 Nacos 拉去对应的实例信息了。</p>
+<h1 id="四种事务模式">四种事务模式</h1>
+<h2 id="xa-模式">XA 模式</h2>
+<h3 id="两阶段提交">两阶段提交</h3>
+<p>XA 是规范，目前主流数据库都实现了这种规范，实现的原理都是基于两阶段提交。</p>
+<p>正常情况：</p>
+<image src="/photos/image-20210724174102768.png" caption="" >
+<p>异常情况：</p>
+<image src="/photos/image-20210724174234987.png" caption="" >
+<p><strong>一阶段：</strong></p>
+<ul>
+<li>事务协调者通知每个事务参与者执行本地事务</li>
+<li>本地事务执行完成后报告十五执行状态给事务协调者，此时事务不提交，继续持有数据库锁</li>
+</ul>
+<p><strong>二阶段：</strong></p>
+<ul>
+<li>事务协调者基于一阶段的报告来判断下一步操作
+<ul>
+<li>如果一阶段都成功，则通知所有事务参与者，提交事务</li>
+<li>如果一阶段任意一个参与者失败，则通知所有事务参与者回滚事务</li>
+</ul>
+</li>
+</ul>
+<h3 id="seata-的-xa-模型">Seata 的 XA 模型</h3>
+<image src="/photos/image-20210724174424070.png" caption="XA 模型" >
+<p>RM一阶段的工作：</p>
+<p>​	① 注册分支事务到TC</p>
+<p>​	② 执行分支业务sql但不提交</p>
+<p>​	③ 报告执行状态到TC</p>
+<p>TC二阶段的工作：</p>
+<ul>
+<li>
+<p>TC检测各分支事务执行状态</p>
+<p>a.如果都成功，通知所有RM提交事务</p>
+<p>b.如果有失败，通知所有RM回滚事务</p>
+</li>
+</ul>
+<p>RM二阶段的工作：</p>
+<ul>
+<li>接收TC指令，提交或回滚事务</li>
+</ul>
+<h3 id="优缺点">优缺点</h3>
+<p><strong>XA 模式优点：</strong></p>
+<ul>
+<li>事务的强一致性，满足 ACID 原则。</li>
+<li>常用数据库都支持，实现简单，并且没有代码侵入。</li>
+</ul>
+<p><strong>XA 模式缺点：</strong></p>
+<ul>
+<li>因为一阶段需要锁定数据库资源，等待二阶段结束才释放，性能较差。</li>
+<li>以来关系型数据库实现事务</li>
+</ul>
+<h3 id="实现-xa-模式">实现 XA 模式</h3>
+<p>1）修改 application.yml ，开启 XA 模式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">seata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nt">data-source-proxy-mode</span><span class="p">:</span><span class="w"> </span><span class="l">XA</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>2）给发起全局事务的入口方法添加@GlobalTransactional 注解：</p>
+<p>如 创建订单：</p>
+<image src="/photos/image-20210724174859556.png" caption="@GlobalTransactional 注解" >
+<h2 id="at-模式">AT 模式</h2>
+<p>AT 模式同样是分阶段提交的事务模型，不过弥补了 XA 模型中资源锁定时间过长的缺陷。</p>
+<h3 id="seata-的-at-模型">Seata 的 AT 模型</h3>
+<image src="/photos/image-20210724175327511.png" caption="AT 模式" >
+<p><strong>阶段一RM 的工作：</strong></p>
+<ul>
+<li>注册分支事务</li>
+<li>记录 undo-log（数据快照）</li>
+<li>执行业务 sql 并提交</li>
+<li>报告事务状态</li>
+</ul>
+<p><strong>阶段二提交时 RM 的工作：</strong></p>
+<ul>
+<li>删除 undo-log 即可</li>
+</ul>
+<p><strong>阶段二回滚时 RM 的工作：</strong></p>
+<ul>
+<li>根据 undo-log 恢复数据到更新前</li>
+</ul>
+<p><strong>流程图：</strong></p>
+<image src="/photos/image-20210724180722921.png" caption="AT 模式" >
+<h3 id="at-与-xa-的区别">AT 与 XA 的区别</h3>
+<ul>
+<li>XA 模式一阶段不提交事务，锁定资源；AT 模式一阶段直接提交，不锁定资源。</li>
+<li>XA 模式依赖数据库机制实现回滚；AT 模式利用数据快照实现数据回滚。</li>
+<li>XA 模式强一致；AT 模式最终一致。</li>
+</ul>
+<h3 id="脏写问题">脏写问题</h3>
+<p>在多线程并发访问</p>
+<p>在多线程并发访问AT模式的分布式事务时，有可能出现脏写问题，如图：</p>
+<p>注意：每个事务都有自己的undo log，最终恢复的依据是当前事务的undo log</p>
+<image src="/photos/image-20210724181541234.png" caption="脏写问题" >
+<p>解决思路就是引入了全局锁的概念。在释放DB锁之前，先拿到全局锁。避免同一时刻有另外一个事务来操作当前数据。</p>
+<image src="/photos/image-20210724181843029.png" caption="全局锁解决脏写" >
+<h3 id="at-模式优缺点">AT 模式优缺点</h3>
+<p><strong>AT 模式优点：</strong></p>
+<ul>
+<li>一阶段完成直接提交，释放数据库资源，性能较好</li>
+<li>利用全局锁实现读写隔离</li>
+<li>没有代码侵入，框架自动完成回滚和提交</li>
+</ul>
+<p><strong>AT 模式缺点：</strong></p>
+<ul>
+<li>两阶段之间属于软状态，属于最终一致</li>
+<li>框架的快照功能会影响性能，但比 XA 模式要好很多</li>
+</ul>
+<h3 id="实现-at-模式">实现 AT 模式</h3>
+<p>AT 模式中的快照生成、回滚等动作都是由框架自动完成，没有任何代码侵入，因此实现非常简单。</p>
+<p>不过 AT 模式需要一个表来记录全局锁、另一张表来记录数据快照 undo-log。</p>
+<p>1）导入数据库，记录全局锁</p>
+<p>lock_table 导入到 TC 服务关联的数据库，undo_log 表导入到微服务关联的数据库。</p>
+<p>2）修改 application.yml 文件，将事务模式修改为 AT</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">seata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nt">data-source-proxy-mode</span><span class="p">:</span><span class="w"> </span><span class="l">AT</span><span class="w"> </span><span class="c">#默认就是 AT</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="tcc-模式">TCC 模式</h2>
+<p>TCC模式与AT模式非常相似，每阶段都是独立事务，不同的是TCC通过人工编码来实现数据恢复。需要实现三个方法：</p>
+<ul>
+<li>
+<p>Try：资源的检测和预留；</p>
+</li>
+<li>
+<p>Confirm：完成资源操作业务；要求 Try 成功 Confirm 一定要能成功。</p>
+</li>
+<li>
+<p>Cancel：预留资源释放，可以理解为try的反向操作。</p>
+</li>
+</ul>
+<h3 id="流程分析">流程分析</h3>
+<p>举例，一个扣减用户余额的业务。假设账户A原来余额是100，需要余额扣减30元。</p>
+<ul>
+<li><strong>阶段一（ Try ）</strong>：检查余额是否充足，如果充足则冻结金额增加30元，可用余额扣除30</li>
+</ul>
+<p>初始余额：</p>
+<image src="/photos/image-20210724182424907.png" caption="初始余额" >
+<p>余额充足，可以冻结：</p>
+<image src="/photos/image-20210724182457951.png" caption="冻结" >
+<p>此时，总金额 = 冻结金额 + 可用金额，数量依然是100不变。事务直接提交无需等待其它事务。</p>
+<ul>
+<li><strong>阶段二（Confirm)</strong>：假如要提交（Confirm），则冻结金额扣减30</li>
+</ul>
+<p>确认可以提交，不过之前可用金额已经扣减过了，这里只要清除冻结金额就好了：</p>
+<image src="/photos/image-20210724182706011.png" caption="Confirm" >
+<p>此时，总金额 = 冻结金额 + 可用金额 = 0 + 70  = 70元</p>
+<ul>
+<li><strong>阶段二(Canncel)</strong>：如果要回滚（Cancel），则冻结金额扣减30，可用余额增加30</li>
+</ul>
+<p>需要回滚，那么就要释放冻结金额，恢复可用金额：</p>
+<image src="/photos/image-20210724182810734.png" caption="Canncel" >
+<h3 id="seata-的--tcc-模型">Seata 的  TCC 模型</h3>
+<p><strong>架构图：</strong></p>
+<image src="/photos/image-20210724182937713.png" caption="TCC 架构" >
+<h3 id="tcc-模式优缺点">TCC 模式优缺点</h3>
+<p><strong>TCC 的优点：</strong></p>
+<ul>
+<li>一阶段完成直接提交事务，释放数据库资源，性能好</li>
+<li>相比AT模型，无需生成快照，无需使用全局锁，性能最强</li>
+<li>不依赖数据库事务，而是依赖补偿操作，可以用于非事务型数据库</li>
+</ul>
+<p><strong>TCC 的缺点：</strong></p>
+<ul>
+<li>有代码侵入，需要人为编写try、Confirm和Cancel接口，太麻烦</li>
+<li>软状态，事务是最终一致</li>
+<li>需要考虑Confirm和Cancel的失败情况，做好幂等处理</li>
+</ul>
+<h3 id="事务悬挂和空回滚">事务悬挂和空回滚</h3>
+<h4 id="空回滚">空回滚</h4>
+<p>当分支事务的try阶段<strong>阻塞</strong>时，可能导致全局事务超时而触发二阶段的cancel操作。在未执行try操作时先执行了cancel操作，这时cancel不能做回滚，就是<strong>空回滚</strong>。</p>
+<image src="/photos/image-20210724183426891.png" caption="空回滚" >
+<p>执行cancel操作时，应当判断try是否已经执行，如果尚未执行，则应该空回滚。</p>
+<h4 id="业务悬挂">业务悬挂</h4>
+<p>对于已经回滚的业务，之前被阻塞的try操作恢复，继续执行try，就永远不可能confirm或cancel，事务一直处于中间状态，这就是<strong>业务悬挂</strong>。</p>
+<p>执行try操作时，应当判断cancel是否已经执行过了，如果已经执行，应当阻止空回滚后的try操作，避免悬挂。</p>
+<h3 id="实现-tcc-模式">实现 TCC 模式</h3>
+<p>解决空回滚和业务悬挂问题；必须要记录当前事务状态，是在 try、还是 cancle？</p>
+<h4 id="思路分析">思路分析</h4>
+<p>定义一张表：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="err"> </span><span class="k">TABLE</span><span class="err"> </span><span class="o">`</span><span class="n">account_freeze_tbl</span><span class="o">`</span><span class="err"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">  </span><span class="o">`</span><span class="n">xid</span><span class="o">`</span><span class="err"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span><span class="err"> </span><span class="k">NOT</span><span class="err"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">  </span><span class="o">`</span><span class="n">user_id</span><span class="o">`</span><span class="err"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="err"> </span><span class="k">DEFAULT</span><span class="err"> </span><span class="k">NULL</span><span class="err"> </span><span class="k">COMMENT</span><span class="err"> </span><span class="s1">&#39;用户id&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">  </span><span class="o">`</span><span class="n">freeze_money</span><span class="o">`</span><span class="err"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="err"> </span><span class="n">unsigned</span><span class="err"> </span><span class="k">DEFAULT</span><span class="err"> </span><span class="s1">&#39;0&#39;</span><span class="err"> </span><span class="k">COMMENT</span><span class="err"> </span><span class="s1">&#39;冻结金额&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">  </span><span class="o">`</span><span class="k">state</span><span class="o">`</span><span class="err"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="err"> </span><span class="k">DEFAULT</span><span class="err"> </span><span class="k">NULL</span><span class="err"> </span><span class="k">COMMENT</span><span class="err"> </span><span class="s1">&#39;事务状态，0:try，1:confirm，2:cancel&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">  </span><span class="k">PRIMARY</span><span class="err"> </span><span class="k">KEY</span><span class="err"> </span><span class="p">(</span><span class="o">`</span><span class="n">xid</span><span class="o">`</span><span class="p">)</span><span class="err"> </span><span class="k">USING</span><span class="err"> </span><span class="n">BTREE</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="err"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="err"> </span><span class="k">DEFAULT</span><span class="err"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span><span class="err"> </span><span class="n">ROW_FORMAT</span><span class="o">=</span><span class="n">COMPACT</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>xid：是全局事务 id</li>
+<li>freeze_money：用来记录用户冻结金额</li>
+<li>state：用来记录事务状态</li>
+</ul>
+<p>业务：</p>
+<ul>
+<li>Try业务：
+<ul>
+<li>记录冻结金额和事务状态到 account_freeze表</li>
+<li>扣减 account 表可用金额</li>
+</ul>
+</li>
+<li>Confirm业务：
+<ul>
+<li>根据 xid 删除 account_freeze 表的冻结记录</li>
+</ul>
+</li>
+<li>Cancel 业务：
+<ul>
+<li>修改 account_freeze 表，冻结金额为 0，state 为 2</li>
+<li>修改 account 表，恢复可用金额</li>
+</ul>
+</li>
+<li>如何判断是否空回滚
+<ul>
+<li>cancel 业务中，根据 xid 查询 account_freeze，如果为 null 则说明 try 还没做，需要空回滚</li>
+</ul>
+</li>
+<li>如何避免业务悬挂
+<ul>
+<li>try 业务中，根据 xid 查询 account_freeze，如果已存在则证明 Cancel 已经执行，拒绝执行 try 业务</li>
+</ul>
+</li>
+</ul>
+<h4 id="声明tcc接口">声明TCC接口</h4>
+<p>TCC的Try、Confirm、Cancel方法都需要在接口中基于注解来声明，</p>
+<p>在accoun-service 服务中新建一个接口，声明 TCC 三个接口：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">io.seata.rm.tcc.api.BusinessActionContext</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">io.seata.rm.tcc.api.BusinessActionContextParameter</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">io.seata.rm.tcc.api.LocalTCC</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">io.seata.rm.tcc.api.TwoPhaseBusinessAction</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@LocalTCC</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AccountTCCService</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@TwoPhaseBusinessAction</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#34;deduct&#34;</span><span class="o">,</span> <span class="n">commitMethod</span> <span class="o">=</span> <span class="s">&#34;confirm&#34;</span><span class="o">,</span> <span class="n">rollbackMethod</span> <span class="o">=</span> <span class="s">&#34;cancel&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">deduct</span><span class="o">(</span><span class="nd">@BusinessActionContextParameter</span><span class="o">(</span><span class="n">paramName</span> <span class="o">=</span> <span class="s">&#34;userId&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">userId</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nd">@BusinessActionContextParameter</span><span class="o">(</span><span class="n">paramName</span> <span class="o">=</span> <span class="s">&#34;money&#34;</span><span class="o">)</span><span class="kt">int</span> <span class="n">money</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">boolean</span> <span class="nf">confirm</span><span class="o">(</span><span class="n">BusinessActionContext</span> <span class="n">ctx</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">boolean</span> <span class="nf">cancel</span><span class="o">(</span><span class="n">BusinessActionContext</span> <span class="n">ctx</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="编写实现类">编写实现类</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Service</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@Slf4j</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AccountTCCServiceImpl</span> <span class="kd">implements</span> <span class="n">AccountTCCService</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">AccountMapper</span> <span class="n">accountMapper</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">AccountFreezeMapper</span> <span class="n">freezeMapper</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Transactional</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deduct</span><span class="o">(</span><span class="n">String</span> <span class="n">userId</span><span class="o">,</span> <span class="kt">int</span> <span class="n">money</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 0.获取事务id
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">String</span> <span class="n">xid</span> <span class="o">=</span> <span class="n">RootContext</span><span class="o">.</span><span class="na">getXID</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 1.扣减可用余额
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">accountMapper</span><span class="o">.</span><span class="na">deduct</span><span class="o">(</span><span class="n">userId</span><span class="o">,</span> <span class="n">money</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 2.记录冻结金额，事务状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">AccountFreeze</span> <span class="n">freeze</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AccountFreeze</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">freeze</span><span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">freeze</span><span class="o">.</span><span class="na">setFreezeMoney</span><span class="o">(</span><span class="n">money</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">freeze</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="n">AccountFreeze</span><span class="o">.</span><span class="na">State</span><span class="o">.</span><span class="na">TRY</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">freeze</span><span class="o">.</span><span class="na">setXid</span><span class="o">(</span><span class="n">xid</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">freezeMapper</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">freeze</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">confirm</span><span class="o">(</span><span class="n">BusinessActionContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 1.获取事务id
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">String</span> <span class="n">xid</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getXid</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 2.根据id删除冻结记录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">freezeMapper</span><span class="o">.</span><span class="na">deleteById</span><span class="o">(</span><span class="n">xid</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">cancel</span><span class="o">(</span><span class="n">BusinessActionContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 0.查询冻结记录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">String</span> <span class="n">xid</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getXid</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">AccountFreeze</span> <span class="n">freeze</span> <span class="o">=</span> <span class="n">freezeMapper</span><span class="o">.</span><span class="na">selectById</span><span class="o">(</span><span class="n">xid</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 1.恢复可用余额
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">accountMapper</span><span class="o">.</span><span class="na">refund</span><span class="o">(</span><span class="n">freeze</span><span class="o">.</span><span class="na">getUserId</span><span class="o">(),</span> <span class="n">freeze</span><span class="o">.</span><span class="na">getFreezeMoney</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 2.将冻结金额清零，状态改为CANCEL
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">freeze</span><span class="o">.</span><span class="na">setFreezeMoney</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">freeze</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="n">AccountFreeze</span><span class="o">.</span><span class="na">State</span><span class="o">.</span><span class="na">CANCEL</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">freezeMapper</span><span class="o">.</span><span class="na">updateById</span><span class="o">(</span><span class="n">freeze</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="saga-模式">SAGA 模式</h2>
+<h3 id="原理">原理</h3>
+<p>在 Saga 模式下，分布式事务内有多个参与者，每一个参与者都是一个冲正补偿服务，需要用户根据业务场景实现其正向操作和逆向回滚操作。</p>
+<p>分布式事务执行过程中，依次执行各参与者的正向操作，如果所有正向操作均执行成功，那么分布式事务提交。如果任何一个正向操作执行失败，那么分布式事务会去退回去执行前面各参与者的逆向回滚操作，回滚已提交的参与者，使分布式事务回到初始状态。</p>
+<image src="/photos/image-20210724184846396.png" caption="SAGA 原理" >
+<p>Saga也分为两个阶段：</p>
+<ul>
+<li>一阶段：直接提交本地事务</li>
+<li>二阶段：成功则什么都不做；失败则通过编写补偿业务来回滚</li>
+</ul>
+<h3 id="442优缺点">4.4.2.优缺点</h3>
+<p>优点：</p>
+<ul>
+<li>事务参与者可以基于事件驱动实现异步调用，吞吐高</li>
+<li>一阶段直接提交事务，无锁，性能好</li>
+<li>不用编写TCC中的三个阶段，实现简单</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>软状态持续时间不确定，时效性差</li>
+<li>没有锁，没有事务隔离，会有脏写</li>
+</ul>
+<h2 id="45四种模式对比">4.5.四种模式对比</h2>
+<p>我们从以下几个方面来对比四种实现：</p>
+<ul>
+<li>一致性：能否保证事务的一致性？强一致还是最终一致？</li>
+<li>隔离性：事务之间的隔离性如何？</li>
+<li>代码侵入：是否需要对业务代码改造？</li>
+<li>性能：有无性能损耗？</li>
+<li>场景：常见的业务场景</li>
+</ul>
+<image src="/photos/image-20210724185021819.png" caption="对比" >
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>
+        
+            <a href="/tags/%E4%BA%8B%E5%8A%A1/">事务</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/"],"locale":{"admin":"🤡","placeholder":"🤯你小子戒过毒吗？这都能忍住不评论！"},"requiredMeta":["name","email"],"serverURL":"https://vercel-nu-bay-67.vercel.app"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Climbing Mouse
+    </section>
+    
+    <section class="powerby">
+        
+            <image src="/photos/footer.png" /> <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+
+    
+<section class="running-time">
+    本博客已稳定运行
+    <span id="runningdays" class="running-days"></span>
+    </section>
+
+    <script>
+        (function(u, c) {
+          var d = document, t = 'script', o = d.createElement(t),
+              s = d.getElementsByTagName(t)[0];
+          o.src = u;
+          if (c) { o.addEventListener('load', function(e) { c(e); }); }
+          s.parentNode.insertBefore(o, s);
+        })('//cdn.bootcss.com/pangu/4.0.7/pangu.min.js', function() {
+          pangu.spacingPage();
+        });
+    </script>
+    
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    let s1 = '2022-5-18'; 
+    s1 = new Date(s1.replace(/-/g, "/"));
+    let s2 = new Date();
+    let timeDifference = s2.getTime() - s1.getTime();
+
+    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    let result = days + "天" + hours + "小时" + minutes + "分钟";
+    document.getElementById('runningdays').innerHTML = result;
+</script>
+
+
+<script>
+    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+
+    ChannelIO('boot', {
+        "pluginKey": "2146d6fe-a6cc-4cc5-9a2b-e32a1c35ff0a"
+    });
+</script>
+        
+    </body>
+</html>
