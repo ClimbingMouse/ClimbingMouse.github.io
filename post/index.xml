@@ -231,7 +231,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h5 id=&#34;添加私信小气泡&#34;&gt;添加私信小气泡&lt;/h5&gt;
-&lt;p&gt;详情见这位博主：https://thirdshire.com/post/hugo-stack-renovation/#%E7%A7%81%E4%BF%A1%E8%81%94%E7%B3%BB%E6%B0%94%E6%B3%A1&lt;/p&gt;
+&lt;p&gt;详情见这位博主：&lt;a class=&#34;link&#34; href=&#34;https://thirdshire.com/post/hugo-stack-renovation/#%E7%A7%81%E4%BF%A1%E8%81%94%E7%B3%BB%E6%B0%94%E6%B3%A1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Third Shire 的装修笔记&lt;/a&gt;&lt;/p&gt;
 &lt;h5 id=&#34;添加返回顶部按钮&#34;&gt;添加返回顶部按钮&lt;/h5&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
