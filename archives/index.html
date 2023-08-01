@@ -330,6 +330,25 @@
                 
                     
 <article class="has-image">
+    <a href="/categories/%E5%8B%A4%E8%83%BD%E8%A1%A5%E6%8B%99/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/photos/%e5%8b%a4%e8%83%bd%e8%a1%a5%e6%8b%99.png" loading="lazy" data-key="勤能补拙" data-hash="/photos/勤能补拙.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">勤能补拙</h2>
+        </div>
+    </a>
+</article>
+
+                
+                    
+<article class="has-image">
     <a href="/categories/%E5%AD%9C%E5%AD%9C%E4%B8%8D%E5%80%A6/">
         
         
@@ -385,25 +404,6 @@
 </article>
 
                 
-                    
-<article class="has-image">
-    <a href="/categories/%E5%8B%A4%E8%83%BD%E8%A1%A5%E6%8B%99/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/photos/%e5%8b%a4%e8%83%bd%e8%a1%a5%e6%8b%99.png" loading="lazy" data-key="勤能补拙" data-hash="/photos/勤能补拙.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">勤能补拙</h2>
-        </div>
-    </a>
-</article>
-
-                
             </div>
         </div>
         
@@ -415,6 +415,11 @@
         
             
                 
+                <a href="/tags/docker" class="tagCloud-tags">
+                    docker<span class="tagCloud-count">1</span>
+                </a>
+            
+                
                 <a href="/tags/hugo" class="tagCloud-tags">
                     hugo<span class="tagCloud-count">1</span>
                 </a>
@@ -422,6 +427,11 @@
                 
                 <a href="/tags/%E4%BA%8B%E5%8A%A1" class="tagCloud-tags">
                     事务<span class="tagCloud-count">1</span>
+                </a>
+            
+                
+                <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8" class="tagCloud-tags">
+                    云服务器<span class="tagCloud-count">1</span>
                 </a>
             
                 
@@ -457,6 +467,11 @@
                 
                 <a href="/tags/%E9%81%8D%E5%8E%86" class="tagCloud-tags">
                     遍历<span class="tagCloud-count">5</span>
+                </a>
+            
+                
+                <a href="/tags/%E9%83%A8%E7%BD%B2" class="tagCloud-tags">
+                    部署<span class="tagCloud-count">1</span>
                 </a>
             
                 
@@ -522,6 +537,24 @@
                 
             </div>
         
+    </a>
+</article>
+
+
+            
+                <article>
+    <a href="/p/docker%E9%83%A8%E7%BD%B2/">
+        <div class="article-details">
+            <h2 class="article-title">Docker部署项目到云服务器</h2>
+            
+            <div class="article-subtitle">
+                终于花钱买了个服务器....
+            </div>
+            
+            <footer class="article-time">
+                <time datetime='2023-07-30T16:14:20&#43;08:00'>Jul 30, 2023</time>
+            </footer>
+        </div>
     </a>
 </article>
 
@@ -747,17 +780,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
 
 <script>
-    let s1 = '2022-5-18'; 
-    s1 = new Date(s1.replace(/-/g, "/"));
-    let s2 = new Date();
-    let timeDifference = s2.getTime() - s1.getTime();
+    function updateTime() {
+        let s1 = '2022-5-18'; 
+        s1 = new Date(s1.replace(/-/g, "/"));
+        let s2 = new Date();
+        let timeDifference = s2.getTime() - s1.getTime();
 
-    let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-    let result = days + "天" + hours + "小时" + minutes + "分钟";
-    document.getElementById('runningdays').innerHTML = result;
+        let result = days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+        document.getElementById('runningdays').innerHTML = result;
+    }
+
+    
+    setInterval(updateTime, 1000);
 </script>
 
 
