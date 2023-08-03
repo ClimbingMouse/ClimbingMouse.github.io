@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='强大的消息队列-RabbitMQ'>
+<title>强大的RabbitMQ</title>
+
+<link rel='canonical' href='https://ClimbingMouse.github.io/p/rabbtimq/'>
+
+<link rel="stylesheet" href="/scss/style.min.b92cd3526710e8464efc927c32a2edbb9cff67e48f7c9e36a97a7a610a84faaf.css"><meta property='og:title' content='强大的RabbitMQ'>
+<meta property='og:description' content='强大的消息队列-RabbitMQ'>
+<meta property='og:url' content='https://ClimbingMouse.github.io/p/rabbtimq/'>
+<meta property='og:site_name' content='Climbing Mouse'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='MQ' /><meta property='article:tag' content='RabbitMQ' /><meta property='article:published_time' content='2023-01-23T21:14:20&#43;08:00'/><meta property='article:modified_time' content='2023-01-23T21:14:20&#43;08:00'/>
+<meta name="twitter:title" content="强大的RabbitMQ">
+<meta name="twitter:description" content="强大的消息队列-RabbitMQ">
+    <link rel="shortcut icon" href="/photos/avatar.png" />
+
+    </head>
+    <body id="background-container" class="
+    article-page
+    ">
+        <div class="background-image"></div>
+        <div class="content-wrapper"></div>
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-top"></div>
+            <div class="loader-section section-bottom"></div>
+        </div>
+        <script type="text/javascript">
+            window.onload = function () { document.body.className += ' loaded'; };
+            window.setTimeout(function () { document.body.className += ' loaded'; }, 1500);
+        </script>
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu5d42b4a30f5f0f53f62b35398df5af58_5026_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🌈</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Climbing Mouse</a></h1>
+            <h2 class="site-description">疾风起，不言弃💪</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://travellings.link/'
+                        
+                        title="aTravelling"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-train" width="44" height="44" viewBox="0 0 24 24" stroke-width="0.5" stroke="#2c3e51" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M21 13c0 -3.87 -3.37 -7 -10 -7h-8" />
+  <path d="M3 15h16a2 2 0 0 0 2 -2" />
+  <path d="M3 6v5h17.5" />
+  <path d="M3 10l0 4" />
+  <path d="M8 11l0 -5" />
+  <path d="M13 11l0 -4.5" />
+  <path d="M3 19l18 0" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.foreverblog.cn/go.html'
+                        
+                        title="aWormhole"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1689391208904" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="39349" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M656 43.2h-30.4C614.4 17.6 584 0 555.2 0h-84.8c-30.4 0-59.2 17.6-72 43.2h-33.6c-128 0-233.6 105.6-233.6 233.6v510.4c0 33.6 30.4 64 64 64h51.2L176 952c-12.8 20.8-8 46.4 12.8 59.2 8 4.8 17.6 8 25.6 8 12.8 0 25.6-8 33.6-17.6l97.6-148.8h336l92.8 148.8c8 12.8 20.8 20.8 33.6 20.8 8 0 17.6 0 20.8-8 20.8-12.8 25.6-38.4 12.8-59.2l-64-105.6h51.2c33.6 0 64-30.4 64-64V276.8c1.6-128-104-233.6-236.8-233.6zM468.8 297.6v128H214.4v-128h254.4z m86.4 0h254.4v128H555.2v-128zM363.2 128h33.6c12.8 25.6 43.2 43.2 72 43.2h84.8c30.4 0 59.2-17.6 72-43.2H656c59.2 0 110.4 33.6 136 84.8h-560C252.8 161.6 304 128 363.2 128z m-148.8 636.8V510.4h595.2v254.4H214.4z" p-id="39350" fill="#bfbfbf"></path><path d="M342.4 636.8m-84.8 0a84.8 84.8 0 1 0 169.6 0 84.8 84.8 0 1 0-169.6 0Z" p-id="39351" fill="#bfbfbf"></path><path d="M681.6 636.8m-84.8 0a84.8 84.8 0 1 0 169.6 0 84.8 84.8 0 1 0-169.6 0Z" p-id="39352" fill="#bfbfbf"></path></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='/index.xml'
+                        target="_blank"
+                        title="cRSS"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1689391247524" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="40418" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M554.666667 896c-25.6 0-42.666667-17.066667-42.666667-42.666667 0-187.733333-153.6-341.333333-341.333333-341.333333-25.6 0-42.666667-17.066667-42.666667-42.666667s17.066667-42.666667 42.666667-42.666666c234.666667 0 426.666667 192 426.666666 426.666666 0 25.6-17.066667 42.666667-42.666666 42.666667z" p-id="40419" fill="#bfbfbf"></path><path d="M853.333333 896c-25.6 0-42.666667-17.066667-42.666666-42.666667 0-354.133333-285.866667-640-640-640-25.6 0-42.666667-17.066667-42.666667-42.666666s17.066667-42.666667 42.666667-42.666667c401.066667 0 725.333333 324.266667 725.333333 725.333333 0 25.6-17.066667 42.666667-42.666667 42.666667z" p-id="40420" fill="#bfbfbf"></path><path d="M213.333333 810.666667m-85.333333 0a85.333333 85.333333 0 1 0 170.666667 0 85.333333 85.333333 0 1 0-170.666667 0Z" p-id="40421" fill="#bfbfbf"></path></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/ClimbingMouse'
+                        target="_blank"
+                        title="dGitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1689391441244" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41512" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128"><path d="M682.215454 981.446137c-25.532318 0-42.553863-17.021545-42.553864-42.553864v-165.960067c4.255386-34.043091-8.510773-59.575409-29.787704-80.852341-12.766159-12.766159-17.021545-29.787704-8.510773-42.553864 4.255386-17.021545 21.276932-25.532318 34.043091-29.787704 123.406204-12.766159 238.301635-55.320023 238.301635-255.323181 0-46.80925-17.021545-93.6185-51.064636-131.916976-12.766159-12.766159-12.766159-29.787704-8.510772-42.553864 12.766159-34.043091 12.766159-68.086182 4.255386-102.129272-21.276932 4.255386-55.320023 17.021545-110.640045 55.320022-8.510773 8.510773-21.276932 8.510773-34.043091 4.255387-89.363113-25.532318-187.236999-25.532318-276.600112 0-12.766159 4.255386-25.532318 4.255386-38.298477-4.255387C307.741455 104.836549 269.442978 92.07039 248.166047 87.815004c-8.510773 34.043091-8.510773 68.086182 4.255386 102.129272 4.255386 17.021545 4.255386 34.043091-8.510773 42.553864-34.043091 38.298477-51.064636 85.107727-51.064636 131.916976 0 200.003158 114.895431 242.557022 238.301635 255.323181 17.021545 0 29.787704 12.766159 34.043091 29.787704 4.255386 17.021545 0 34.043091-8.510773 42.553864-21.276932 21.276932-29.787704 46.80925-29.787704 76.596954v165.960068c0 25.532318-17.021545 42.553863-42.553863 42.553863s-42.553863-17.021545-42.553864-42.553863v-72.341568c-127.66159 21.276932-182.981613-51.064636-221.28009-97.873886-17.021545-21.276932-29.787704-38.298477-46.80925-42.553864-21.276932-4.255386-38.298477-29.787704-29.787704-51.064636 4.255386-21.276932 29.787704-38.298477 51.064636-29.787704 42.553863 12.766159 68.086182 42.553863 93.6185 72.341568 34.043091 46.80925 63.830795 80.852341 153.193908 63.830795v-4.255386c0-25.532318 4.255386-55.320023 12.766159-76.596955-119.150818-25.532318-246.812408-102.129272-246.812408-327.664748 0-63.830795 21.276932-123.406204 59.575409-170.215454-17.021545-59.575409-12.766159-114.895431 12.766159-170.215454 4.255386-12.766159 12.766159-21.276932 25.532318-25.532318 17.021545-4.255386 72.341568-12.766159 187.236999 59.575409 93.6185-21.276932 191.492386-21.276932 280.855499 0 110.640045-72.341568 170.215454-63.830795 187.236999-59.575409 12.766159 4.255386 21.276932 12.766159 25.532319 25.532318 21.276932 55.320023 25.532318 110.640045 12.766159 165.960067 38.298477 46.80925 59.575409 106.384659 59.575408 170.215454 0 242.557022-144.683136 306.387817-246.812408 331.920135 8.510773 25.532318 12.766159 55.320023 12.766159 80.852341V938.892273c0 25.532318-17.021545 42.553863-42.553863 42.553864z" p-id="41513" fill="#bfbfbf"></path></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/categories/%E5%8B%A4%E8%83%BD%E8%A1%A5%E6%8B%99/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="44" height="44" viewBox="0 0 24 24" stroke-width="1" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+  <path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+  <path d="M5 8h4" />
+  <path d="M9 16h4" />
+  <path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z" />
+  <path d="M14 9l4 -1" />
+  <path d="M16 16l3.923 -.98" />
+</svg>
+                
+                <span>学习</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>朋友们</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                <form action="/search/" class="search-form widget" >
+        <p>
+            <label>搜索</label>
+            <input name="keyword" required placeholder="输入关键词..." />
+        
+            <button title="搜索">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+            
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#为什么要有消息队列"><strong>为什么要有消息队列？</strong></a></li>
+    <li><a href="#什么是消费队列">什么是消费队列</a></li>
+    <li><a href="#工作原理">工作原理</a></li>
+    <li><a href="#常见消息模型">常见消息模型</a></li>
+  </ol>
+</nav>
+        </div>
+
+        <a href="#" id="back-to-top"><image src="/photos/top.png"></image></a>
+    </section>
+
+
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    
+    $(window).scroll(function() {
+    if ($(this).scrollTop()) {
+        $('#back-to-top').fadeIn();
+    } else {
+        $('#back-to-top').fadeOut();
+    }
+    });
+
+    
+    $('#back-to-top').click(function() {
+    $('html, body').animate({scrollTop: 0}, 1000);
+    return false;
+    });
+</script>
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%8B%A4%E8%83%BD%E8%A1%A5%E6%8B%99/" style="background-color: ; color: #FBFEBE;">
+                勤能补拙
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/rabbtimq/">强大的RabbitMQ</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            强大的消息队列-RabbitMQ
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 23, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>分享一个使用过的非常好用的中间件-RabbitMQ</p>
+</blockquote>
+<h2 id="为什么要有消息队列"><strong>为什么要有消息队列？</strong></h2>
+<p>我们来模拟一个电商场景:</p>
+<ul>
+<li>商品数据保存在数据库中，增删改查也在数据库中完成</li>
+<li>搜素服务数据来源是 ElasticSearch，如果数据库商品发生变化，ES 不能及时更新</li>
+<li>商品详情页面做了静态化处理，静态页面数据不会随着数据库更新而变化</li>
+</ul>
+<p>这样会导致，后台已经修改了商品数据，但是页面展示的依然是旧数据，这样显然不对，如何解决？</p>
+<p>也许你会想到:</p>
+<ol>
+<li>每当后台对商品做了数据修改，同时修改 ES 数据并更新静态页面</li>
+<li>页面静态化服务对外提供操作接口，后台在商品数据修改后，调用接口</li>
+</ol>
+<p>但是这两种方案都有一个严重问题:代码耦合，后台服务中需要嵌入搜索和商品服务，违背了微服务独立原则</p>
+<p>这时候，<strong>消息队列</strong>出现了！</p>
+<p>商品服务对数据修改后，无需操作 ES 和 静态页面，只需向 MQ 发送一条消息（比如包含商品id的消息）。静态页面服务监听 MQ，接收消息，然后分别去处理 ES 和静态页面。</p>
+<h2 id="什么是消费队列">什么是消费队列</h2>
+<blockquote>
+<p>“消息队列”是在消息的传输过程中保存消息的容器。它是典型的：生产者、消费者模型。生产者不断向消息队列中生产消息，消费者不断的从队列中获取消息。因为消息的生产和消费都是异步的，而且只关心消息的发送和接收，没有业务逻辑的侵入，这样就实现了生产者和消费者的解耦。</p>
+</blockquote>
+<h2 id="工作原理">工作原理</h2>
+<p><strong>基本结构：</strong></p>
+<p><img src="/photos/mq1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="MQ 工作原理"
+	
+	
+></p>
+<ul>
+<li>Broker：消息队列服务进程，此进程包括两个部分：Exchange、Queue</li>
+<li>Exchange：消息队列交换机，按一定规则将消息路由转发到某个队列，对消息进行过滤</li>
+<li>Queue：消息队列，存储消息的队列，消息到达队列并转发给指定消费者</li>
+<li>Producer：消息生产者，即生产方客户端，生产方客户端将消息发送到消息队列</li>
+<li>Consumer：消息消费者，即消费方客户端，接收MQ转发的消息</li>
+</ul>
+<p>生产者发送消息流程：</p>
+<ol>
+<li>生产者和 Broker 建立 TCP 连接</li>
+<li>生产者和 Broker 建立通道</li>
+<li>生产者通过通道消息发送给 Broker，由 Exchange 将消息进行转发</li>
+<li>Exchange 将消息转发到指定的 Queue</li>
+</ol>
+<p>消费者接收消息流程：</p>
+<ol>
+<li>消费者和 Broker 建立 TCP 连接</li>
+<li>消费者和 Broker 建立通道</li>
+<li>消费者监听指定的 Queue</li>
+<li>当有消息到达 Queue 时 Broker 默认将消息推送给消费者</li>
+<li>消费者接受到消息</li>
+<li>ack 回复</li>
+</ol>
+<h2 id="常见消息模型">常见消息模型</h2>
+<p><strong>①基本消息模型：</strong></p>
+<p><img src="/photos/mq2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="img"
+	
+	
+></p>
+<ul>
+<li>P：生产者，也就是要发送消息的程序</li>
+<li>C：消费者：消息的接收者，会一直等待消息到来</li>
+<li>queue（红色部分）：消息队列，可以缓存消息；生产者向其中投递消息，消费者从中取出消息</li>
+</ul>
+<p><strong>②work消息模型：</strong></p>
+<blockquote>
+<p>工作队列或者<strong>竞争消费者</strong>模式</p>
+</blockquote>
+<p><img src="/photos/mq3.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="img"
+	
+	
+></p>
+<p>与基本消息模型相比，该模型多了消费端，多个消费端共同消费同一个队列中的消息，但是一个消息只能被一个消费者获取。</p>
+<p>这个消息模型在 Web 应用程序特别有用，可以处理短的 HTTP 请求窗口无法处理复杂的任务。</p>
+<p>当一个消费者比较耗时，处理消息效率就会降低很多：</p>
+<p>通过如下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">channel</span><span class="o">.</span><span class="na">basicQos</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><code>basicQos</code> 方法设置 <code>prefetchCount</code>  为 1，这样 <code>mq</code> 会使得每个 <code>consumer</code> 在同一时间点最多处理一个消息。所以，如果该消费者没有确认消息，队列不会将新的消息分发给它。相反，会分派给不忙碌的下一个消费者。</p>
+</blockquote>
+<p>**注意：**prefetchCount 在手动 ack 的情况下才生效，自动 ack 不生效。</p>
+<p>开启手动 ack：</p>
+<blockquote>
+<p>basicConsume 方法第二个参数设置为 false</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">channel</span><span class="o">.</span><span class="na">basicConsume</span><span class="o">(</span><span class="n">QUEUE_NAME</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="n">consumer</span><span class="o">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一般情况下，对于不重要的消息（丢失也无所谓）可以采取自动 ack，方便</p>
+<p>如果消息非常重要，不容丢失，那么最好在消费完成后手动 ack，否则接收消息后就自动 ack，mq 会把消息队列中该消息删除，如果此时消费者宕机，那么消息丢失。</p>
+<p><strong>③Publish/subscribe（交换机类型：Fanout，也成为广播）</strong></p>
+<p><img src="/photos/mq4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="img"
+	
+	
+></p>
+<p><strong>生产者：</strong></p>
+<p>和前两种模式不同：</p>
+<ol>
+<li>声明Exchange，不再声明Queue</li>
+<li>发送消息到Exchange，不再发送到Queue</li>
+</ol>
+<p>与work queues有何区别？</p>
+<p>异：</p>
+<ol>
+<li>work queues不用定义交换机，而publish/subscribe需要定义交换机</li>
+<li>p/s 的生产者是面向交换机发送消息，work queues生产者是面向队列发送消息（底层使用默认交换机）</li>
+<li>p/s 需要设置队列和交换机的绑定，work queues不需要设置，实际上work queues会将队列绑定到默认交换机</li>
+</ol>
+<p>同：</p>
+<p>​	两者实现的发布/订阅效果一样，多个消费端监听同一个队列不会重复消费消息</p>
+<p><strong>④Routing 路由模型（交换机类型：direct）</strong></p>
+<p><img src="/photos/mq5.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="img"
+	
+	
+></p>
+<p>P：生产者：向Exchange发送消息，发送消息时，会指定一个routing key
+X：Exchange（交换机）：接收生产者的消息，然后把消息递给与 routing key 完全匹配的队列</p>
+<p>C1：消费者：所在队里指定了需要routing key 为error 的消息</p>
+<p>C2：消费者：所在队列指定了需要routing key 为info、error、warning的消息</p>
+<p><strong>⑤Topics 通配符模式（交换机类型：topics）</strong></p>
+<p><img src="/photos/mq6.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="img"
+	
+	
+></p>
+<p>每个消费者监听自己的队列，并且设置带通配符的 routing key，生产者将消息发送给 broker，由交换机根据 routing key来转发消息到指定的队列</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/mq/">MQ</a>
+        
+            <a href="/tags/rabbitmq/">RabbitMQ</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/docker%E9%83%A8%E7%BD%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Docker部署项目到云服务器</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/seata/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/photos/seata.png" loading="lazy" data-key="seata" data-hash="/photos/seata.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">分布式事务 Seata</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/lrucache/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">LRU 缓存</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/padding/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">排序算法</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/%E7%BB%84%E5%90%88%E9%97%AE%E9%A2%98%E4%BC%98%E5%8C%96-%E5%87%8F%E6%9E%9D/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">组合问题优化-减枝</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/"],"locale":{"admin":"🤡","placeholder":"🤯你小子戒过毒吗？这都能忍住不评论！"},"requiredMeta":["name","email"],"serverURL":"https://vercel-nu-bay-67.vercel.app"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Climbing Mouse
+    </section>
+    
+    <section class="powerby">
+        
+            <image src="/photos/footer.png" /> <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+
+    
+<section class="running-time">
+    本博客已稳定运行
+    <span id="runningdays" class="running-days"></span>
+    </section>
+
+    <script>
+        (function(u, c) {
+          var d = document, t = 'script', o = d.createElement(t),
+              s = d.getElementsByTagName(t)[0];
+          o.src = u;
+          if (c) { o.addEventListener('load', function(e) { c(e); }); }
+          s.parentNode.insertBefore(o, s);
+        })('//cdn.bootcss.com/pangu/4.0.7/pangu.min.js', function() {
+          pangu.spacingPage();
+        });
+    </script>
+    
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300&family=Noto+Serif+SC:wght@300&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
+<script>
+    function updateTime() {
+        let s1 = '2022-5-18'; 
+        s1 = new Date(s1.replace(/-/g, "/"));
+        let s2 = new Date();
+        let timeDifference = s2.getTime() - s1.getTime();
+
+        let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+        let result = days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+        document.getElementById('runningdays').innerHTML = result;
+    }
+
+    
+    setInterval(updateTime, 1000);
+</script>
+
+
+<script>
+    (function () { var w = window; if (w.ChannelIO) { return w.console.error("ChannelIO script included twice."); } var ch = function () { ch.c(arguments); }; ch.q = []; ch.c = function (args) { ch.q.push(args); }; w.ChannelIO = ch; function l() { if (w.ChannelIOInitialized) { return; } w.ChannelIOInitialized = true; var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js"; var x = document.getElementsByTagName("script")[0]; if (x.parentNode) { x.parentNode.insertBefore(s, x); } } if (document.readyState === "complete") { l(); } else { w.addEventListener("DOMContentLoaded", l); w.addEventListener("load", l); } })();
+
+    ChannelIO('boot', {
+        "pluginKey": "2146d6fe-a6cc-4cc5-9a2b-e32a1c35ff0a"
+    });
+</script>
+        
+    </body>
+</html>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>RabbitMQ on Climbing Mouse</title>
+        <link>https://ClimbingMouse.github.io/tags/rabbitmq/</link>
+        <description>Recent content in RabbitMQ on Climbing Mouse</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Mon, 23 Jan 2023 21:14:20 +0800</lastBuildDate><atom:link href="https://ClimbingMouse.github.io/tags/rabbitmq/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>强大的RabbitMQ</title>
+        <link>https://ClimbingMouse.github.io/p/rabbtimq/</link>
+        <pubDate>Mon, 23 Jan 2023 21:14:20 +0800</pubDate>
+        
+        <guid>https://ClimbingMouse.github.io/p/rabbtimq/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;分享一个使用过的非常好用的中间件-RabbitMQ&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;为什么要有消息队列&#34;&gt;&lt;strong&gt;为什么要有消息队列？&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;我们来模拟一个电商场景:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;商品数据保存在数据库中，增删改查也在数据库中完成&lt;/li&gt;
+&lt;li&gt;搜素服务数据来源是 ElasticSearch，如果数据库商品发生变化，ES 不能及时更新&lt;/li&gt;
+&lt;li&gt;商品详情页面做了静态化处理，静态页面数据不会随着数据库更新而变化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这样会导致，后台已经修改了商品数据，但是页面展示的依然是旧数据，这样显然不对，如何解决？&lt;/p&gt;
+&lt;p&gt;也许你会想到:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;每当后台对商品做了数据修改，同时修改 ES 数据并更新静态页面&lt;/li&gt;
+&lt;li&gt;页面静态化服务对外提供操作接口，后台在商品数据修改后，调用接口&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;但是这两种方案都有一个严重问题:代码耦合，后台服务中需要嵌入搜索和商品服务，违背了微服务独立原则&lt;/p&gt;
+&lt;p&gt;这时候，&lt;strong&gt;消息队列&lt;/strong&gt;出现了！&lt;/p&gt;
+&lt;p&gt;商品服务对数据修改后，无需操作 ES 和 静态页面，只需向 MQ 发送一条消息（比如包含商品id的消息）。静态页面服务监听 MQ，接收消息，然后分别去处理 ES 和静态页面。&lt;/p&gt;
+&lt;h2 id=&#34;什么是消费队列&#34;&gt;什么是消费队列&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“消息队列”是在消息的传输过程中保存消息的容器。它是典型的：生产者、消费者模型。生产者不断向消息队列中生产消息，消费者不断的从队列中获取消息。因为消息的生产和消费都是异步的，而且只关心消息的发送和接收，没有业务逻辑的侵入，这样就实现了生产者和消费者的解耦。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;工作原理&#34;&gt;工作原理&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;基本结构：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ClimbingMouse.github.io/photos/mq1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;MQ 工作原理&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Broker：消息队列服务进程，此进程包括两个部分：Exchange、Queue&lt;/li&gt;
+&lt;li&gt;Exchange：消息队列交换机，按一定规则将消息路由转发到某个队列，对消息进行过滤&lt;/li&gt;
+&lt;li&gt;Queue：消息队列，存储消息的队列，消息到达队列并转发给指定消费者&lt;/li&gt;
+&lt;li&gt;Producer：消息生产者，即生产方客户端，生产方客户端将消息发送到消息队列&lt;/li&gt;
+&lt;li&gt;Consumer：消息消费者，即消费方客户端，接收MQ转发的消息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;生产者发送消息流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;生产者和 Broker 建立 TCP 连接&lt;/li&gt;
+&lt;li&gt;生产者和 Broker 建立通道&lt;/li&gt;
+&lt;li&gt;生产者通过通道消息发送给 Broker，由 Exchange 将消息进行转发&lt;/li&gt;
+&lt;li&gt;Exchange 将消息转发到指定的 Queue&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;消费者接收消息流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;消费者和 Broker 建立 TCP 连接&lt;/li&gt;
+&lt;li&gt;消费者和 Broker 建立通道&lt;/li&gt;
+&lt;li&gt;消费者监听指定的 Queue&lt;/li&gt;
+&lt;li&gt;当有消息到达 Queue 时 Broker 默认将消息推送给消费者&lt;/li&gt;
+&lt;li&gt;消费者接受到消息&lt;/li&gt;
+&lt;li&gt;ack 回复&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;常见消息模型&#34;&gt;常见消息模型&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;①基本消息模型：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ClimbingMouse.github.io/photos/mq2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;img&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;P：生产者，也就是要发送消息的程序&lt;/li&gt;
+&lt;li&gt;C：消费者：消息的接收者，会一直等待消息到来&lt;/li&gt;
+&lt;li&gt;queue（红色部分）：消息队列，可以缓存消息；生产者向其中投递消息，消费者从中取出消息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;②work消息模型：&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;工作队列或者&lt;strong&gt;竞争消费者&lt;/strong&gt;模式&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://ClimbingMouse.github.io/photos/mq3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;img&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;与基本消息模型相比，该模型多了消费端，多个消费端共同消费同一个队列中的消息，但是一个消息只能被一个消费者获取。&lt;/p&gt;
+&lt;p&gt;这个消息模型在 Web 应用程序特别有用，可以处理短的 HTTP 请求窗口无法处理复杂的任务。&lt;/p&gt;
+&lt;p&gt;当一个消费者比较耗时，处理消息效率就会降低很多：&lt;/p&gt;
+&lt;p&gt;通过如下代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;channel&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;basicQos&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;basicQos&lt;/code&gt; 方法设置 &lt;code&gt;prefetchCount&lt;/code&gt;  为 1，这样 &lt;code&gt;mq&lt;/code&gt; 会使得每个 &lt;code&gt;consumer&lt;/code&gt; 在同一时间点最多处理一个消息。所以，如果该消费者没有确认消息，队列不会将新的消息分发给它。相反，会分派给不忙碌的下一个消费者。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;**注意：**prefetchCount 在手动 ack 的情况下才生效，自动 ack 不生效。&lt;/p&gt;
+&lt;p&gt;开启手动 ack：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;basicConsume 方法第二个参数设置为 false&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;channel&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;basicConsume&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;QUEUE_NAME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;consumer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;一般情况下，对于不重要的消息（丢失也无所谓）可以采取自动 ack，方便&lt;/p&gt;
+&lt;p&gt;如果消息非常重要，不容丢失，那么最好在消费完成后手动 ack，否则接收消息后就自动 ack，mq 会把消息队列中该消息删除，如果此时消费者宕机，那么消息丢失。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;③Publish/subscribe（交换机类型：Fanout，也成为广播）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ClimbingMouse.github.io/photos/mq4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;img&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;生产者：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;和前两种模式不同：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;声明Exchange，不再声明Queue&lt;/li&gt;
+&lt;li&gt;发送消息到Exchange，不再发送到Queue&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;与work queues有何区别？&lt;/p&gt;
+&lt;p&gt;异：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;work queues不用定义交换机，而publish/subscribe需要定义交换机&lt;/li&gt;
+&lt;li&gt;p/s 的生产者是面向交换机发送消息，work queues生产者是面向队列发送消息（底层使用默认交换机）&lt;/li&gt;
+&lt;li&gt;p/s 需要设置队列和交换机的绑定，work queues不需要设置，实际上work queues会将队列绑定到默认交换机&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;同：&lt;/p&gt;
+&lt;p&gt;​	两者实现的发布/订阅效果一样，多个消费端监听同一个队列不会重复消费消息&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;④Routing 路由模型（交换机类型：direct）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ClimbingMouse.github.io/photos/mq5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;img&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;P：生产者：向Exchange发送消息，发送消息时，会指定一个routing key
+X：Exchange（交换机）：接收生产者的消息，然后把消息递给与 routing key 完全匹配的队列&lt;/p&gt;
+&lt;p&gt;C1：消费者：所在队里指定了需要routing key 为error 的消息&lt;/p&gt;
+&lt;p&gt;C2：消费者：所在队列指定了需要routing key 为info、error、warning的消息&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;⑤Topics 通配符模式（交换机类型：topics）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ClimbingMouse.github.io/photos/mq6.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;img&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;每个消费者监听自己的队列，并且设置带通配符的 routing key，生产者将消息发送给 broker，由交换机根据 routing key来转发消息到指定的队列&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

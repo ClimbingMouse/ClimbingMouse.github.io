@@ -12,7 +12,7 @@
         <pubDate>Sun, 11 Jun 2023 23:36:20 +0800</pubDate>
         
         <guid>https://ClimbingMouse.github.io/p/seata/</guid>
-        <description>&lt;h1 id=&#34;seata-学习笔记&#34;&gt;Seata 学习笔记&lt;/h1&gt;
+        <description>&lt;img src="https://ClimbingMouse.github.io/photos/seata.png" alt="Featured image of post 分布式事务 Seata" /&gt;&lt;h1 id=&#34;seata-学习笔记&#34;&gt;Seata 学习笔记&lt;/h1&gt;
 &lt;h1 id=&#34;分布式事务&#34;&gt;分布式事务&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;单体应用被拆分成微服务应用，原来的多个模块被分成多个独立的应用，分别使用多个独立的数据源，业务操作需要调用多个服务来完成。此时&lt;strong&gt;每个服务内部的数据一致性由本地事务来保证&lt;/strong&gt;，但是&lt;strong&gt;全局的数据一致性问题没有办法保证。&lt;/strong&gt;&lt;/p&gt;
