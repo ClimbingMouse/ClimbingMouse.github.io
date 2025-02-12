@@ -1,3 +1,3 @@
-var posts=["2025/02/10/hello-world copy 2/","2025/02/10/hello-world/","2025/02/10/hello-world copy 3/","2025/02/10/hello-world copy/"];function toRandomPost(){
+var posts=["2025/02/12/复盘/","2025/02/12/优秀文章-Android/","2025/02/12/好用的工具/","2025/02/12/笔记-Android/","2025/02/12/小技巧/","2025/02/12/面试题-Android/"];function toRandomPost(){
     pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
   };
