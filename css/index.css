@@ -5510,6 +5510,127 @@ body[data-type='about'] #web_bg {
   height: 100%;
   width: 49%;
 }
+.card-list {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -o-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -o-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -o-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.card {
+  background-color: #fff;
+  border-radius: 30px;
+  border: var(--style-border-always);
+  -webkit-box-shadow: var(--anzhiyu-shadow-border);
+  box-shadow: var(--anzhiyu-shadow-border);
+  width: 320px;
+  height: 350px; /* 固定卡片高度 */
+  overflow: hidden;
+  position: relative;
+  background-image: url("https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/badminton.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.card-header {
+  padding: 10px;
+  color: var(--anzhiyu-white);
+}
+.card-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--anzhiyu-white);
+}
+.card-header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: var(--anzhiyu-white);
+}
+.card-content {
+  height: 300px; /* 固定内容区域高度 */
+  overflow: hidden;
+  position: relative;
+}
+.song-list {
+  height: 300px;
+  position: absolute;
+  bottom: -170px; /* 初始时底部对齐 */
+  width: 100%;
+  -webkit-transition: -webkit-transform 0.3s ease;
+  -moz-transition: -moz-transform 0.3s ease;
+  -o-transition: -o-transform 0.3s ease;
+  -ms-transition: -ms-transform 0.3s ease;
+  transition: transform 0.3s ease; /* 添加滑动过渡效果 */
+}
+.card:hover .song-list {
+  -webkit-transform: translateY(calc(-90% + 100px));
+  -moz-transform: translateY(calc(-90% + 100px));
+  -o-transform: translateY(calc(-90% + 100px));
+  -ms-transform: translateY(calc(-90% + 100px));
+  transform: translateY(calc(-90% + 100px)); /* 鼠标悬停时向上滑动 */
+}
+.song {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 10px;
+}
+.song img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.song-info h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--anzhiyu-white);
+}
+.song-info p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: var(--anzhiyu-white);
+}
 @-moz-keyframes loading-bar {
   0% {
     width: 0;
