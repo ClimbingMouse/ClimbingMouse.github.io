@@ -60,7 +60,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2025-03-05 14:02:34',
+  postUpdate: '2025-03-05 16:51:39',
   postMainColor: '',
 }</script><noscript><style type="text/css">
   #nav {
@@ -253,7 +253,7 @@ queueMicrotask(() => {
   const Log = function () {
     HoldLog.apply(console, arguments);
   }; //在恢复前输出日志
-  const grt = new Date("04/01/2021 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  const grt = new Date("04/11/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
   now1.setTime(now1.getTime() + 250);
   const days = (now1 - grt) / 1000 / 60 / 60 / 24;
   const dnum = Math.floor(days);
@@ -318,7 +318,7 @@ queueMicrotask(() => {
     console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
   );
 });</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
-  var grt = new Date("04/01/2021 00:00:00"); //设置网站上线时间
+  var grt = new Date("04/11/2023 00:00:00"); //设置网站上线时间
   var now = new Date();
   var dnum;
   var hnum;
@@ -361,7 +361,7 @@ queueMicrotask(() => {
       // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
       let img = document.querySelector("#workboard .workSituationImg");
       if (img != null) {
-        img.src = "https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-下班啦.svg";
+        img.src = "https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/WH-%E4%B8%8B%E7%8F%AD%E4%BA%86-grey.svg";
         img.title = "下班了就该开开心心的玩耍，嘿嘿~";
         img.alt = "下班了就该开开心心的玩耍，嘿嘿~";
       }
