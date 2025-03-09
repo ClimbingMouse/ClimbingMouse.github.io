@@ -2693,7 +2693,7 @@ i.anzhiyu-icon-hashtag {
   --card-hover-box-shadow: 0 3px 8px 6px rgba(7,17,27,0.09);
   --pseudo-hover: #ff7242;
   --headline-presudo: var(--anzhiyu-fontcolor);
-  --scrollbar-color: var(--anzhiyu-scrollbar);
+  --scrollbar-color: #0a84ff;
   --anzhiyu-snackbar-time: 2000ms;
   --anzhiyu-deep-purple: #405589;
   --anzhiyu-meta-theme-color: #f7f9fe;
@@ -23898,20 +23898,23 @@ div#swiper_container:hover {
 .blog-slider__pagination {
   position: absolute;
   z-index: 21;
-  right: 20px;
-  width: 11px !important;
+  right: 50%;
+  /* width: auto !important; */
   text-align: center;
-  left: auto !important;
-  top: 50%;
-  bottom: auto !important;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  left: 50% !important;
+  top: auto;
+  bottom: 20px !important;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  display: flex; /* 添加这一行 */
+  justify-content: center; /* 添加这一行 */
+  flex-direction: row; /* 添加这一行 */
 }
 .blog-slider .blog-slider__pagination.swiper-pagination-bullets .swiper-pagination-bullet {
-  margin: 8px 0;
+  margin: 0 8px;
 }
 .blog-slider__pagination .swiper-pagination-bullet {
   width: 11px;
@@ -23931,7 +23934,7 @@ div#swiper_container:hover {
   -ms-filter: none;
   filter: none;
   background: var(--btn-bg);
-  height: 30px;
+  width: 30px;
 }
 @media screen and (max-width: 768px) {
   .blog-slider__pagination {
