@@ -1,3 +1,3 @@
-var posts=["2025/03/02/englishlearn/","2025/01/06/forinterview/","2025/03/01/justrecord/","2025/03/09/getherback/","2025/01/10/nicetools/","2025/01/06/nicearticles/","2025/01/10/notes/","2024/12/21/someskills/","2025/01/07/summary/","2025/03/13/【每日早报】-2025-03-13 - 星期四/"];function toRandomPost(){
+var posts=["2025/03/02/englishlearn/","2025/01/06/forinterview/","2025/03/01/justrecord/","2025/03/09/getherback/","2025/01/10/nicetools/","2025/01/06/nicearticles/","2025/01/10/notes/","2024/12/21/someskills/","2025/01/07/summary/","2025/03/14/【每日早报】-2025-03-14 - 星期五/"];function toRandomPost(){
     pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
   };
