@@ -5,10 +5,10 @@
     
     <entry>
       <title>【每日早报】</title>
-      <link href="/2025/03/27/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/"/>
-      <url>/2025/03/27/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/</url>
+      <link href="/2025/04/21/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/"/>
+      <url>/2025/04/21/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/</url>
       
-        <content type="html"><![CDATA[<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>每日早报</title></head><body>    <div style="text-align: center;"> <img src="https://file.alapi.cn/60s/202503271743014701.png"            alt="每日早报" width="100%"> </div></body></html>]]></content>
+        <content type="html"><![CDATA[<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>每日早报</title></head><body>    <div style="text-align: center;"> <img src="https://file.alapi.cn/60s/202504211745176505.png"            alt="每日早报" width="100%"> </div></body></html>]]></content>
       
       
       <categories>
@@ -21,6 +21,35 @@
         <tags>
             
             <tag> 每日早报 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>反编译 APK</title>
+      <link href="/2025/03/27/decodeapk/"/>
+      <url>/2025/03/27/decodeapk/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Android逆向"><a href="#Android逆向" class="headerlink" title="Android逆向"></a>Android逆向</h1><h2 id="反编译APK"><a href="#反编译APK" class="headerlink" title="反编译APK"></a>反编译APK</h2><h3 id="工具介绍"><a href="#工具介绍" class="headerlink" title="工具介绍"></a>工具介绍</h3><p>如果只是想拿到apk中的图片资源，只需要将apk后缀改为zip然后解压缩，<strong>res</strong>目录中就包含了所有的资源文件</p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/releasezip.png"></p><p><strong>classes.dex</strong> 则包含了所有的代码，只是还无法查看</p><p><strong>AndroidManifest.xml</strong> 文件打开会发现无法阅读，都是16进制数</p><p>此时就需要用到工具 —— ApkTool</p><h4 id="ApkTool"><a href="#ApkTool" class="headerlink" title="ApkTool"></a>ApkTool</h4><h5 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h5><p><a href="https://apktool.org/">ApkTool官网</a></p><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/apktooldocs.png"></p><h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool d xxx.apk</span><br></pre></td></tr></table></figure><blockquote><p>d 表示 decode</p><p>还可以加上一些附加参数来控制 decode 行为：</p><p>-f ：如果目标文件夹已存在，则强制删除现有文件夹（默认如果目标文件夹已存在，则解码失败）</p><p>-o ：指定解码目标文件夹的名称（默认使用 APK 文件的名字来命名目标文件夹）</p><p>-s ：不反编译dex文件，也就是说 classes.dex 文件会被保留（默认会将 dex 文件解码成 smali 文件）</p><p>-r ：不反编译资源文件，也就是说 resources.arsc 文件会被保留（默认会将 resources.arsc 解码成具体的资源文件）</p></blockquote><p>反编译之后会得到以下内容：</p><ul><li>1、AndroidManifest.xml：经过反编译还原后的 manifest 文件</li><li>2、original 文件夹：存放了未经反编译过、原始的 AndroidManifest.xml 文件</li><li>3、res 文件夹：存放了反编译出来的所有资源</li><li>4、smali 文件夹：存放了反编译出来的所有代码，只不过格式都是<code>.smali</code>类型的</li></ul><p>xml文件已经可以看懂了，不过 smali 类型文件我们依然无法阅读</p><p>此时，需要用到另一个工具 —— dex2jar + jd-gui</p><h4 id="dex2jar"><a href="#dex2jar" class="headerlink" title="dex2jar"></a>dex2jar</h4><h5 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h5><p>将 dex 转换成 jar 形式文件</p><h5 id="下载-1"><a href="#下载-1" class="headerlink" title="下载"></a>下载</h5><p><a href="https://sourceforge.net/projects/dex2jar/files/">dex2jar官网</a></p><h5 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h5><p>将下载的 dex2jar 压缩包解压后，可以看到以下内容</p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/dex2jar.png"></p><p>windows上使用dex2jar.bat即可</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dex2jar.bat classes.dex路径</span><br></pre></td></tr></table></figure><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/dexcontent.png"></p><p>看到上述console则表示成功</p><p>代码都位于 classes-dex2jar.jar 中</p><p>现在需要用到另一款工具 jd-gui</p><h4 id="jd-gui"><a href="#jd-gui" class="headerlink" title="jd-gui"></a>jd-gui</h4><h5 id="下载-2"><a href="#下载-2" class="headerlink" title="下载"></a>下载</h5><p><a href="https://java-decompiler.github.io/">jd-gui官网</a></p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/jdgui.png"></p><p>根据需要下载对应包即可</p><h5 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h5><p><img src="C:\Users\bamboo\AppData\Roaming\Typora\typora-user-images\image-20250327145549112.png" alt="image-20250327145549112"></p><p>解压到本地，双击jd-gui.exe文件即可运行</p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/jarcontent.png"></p><p>用jd-gui打开之前解压出来的dex文件即可看到所有的源码</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习 </category>
+          
+          <category> 逆向工程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 安卓 </tag>
+            
+            <tag> Decode </tag>
             
         </tags>
       
@@ -48,35 +77,6 @@
             <tag> Gradle </tag>
             
             <tag> 安卓 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>反编译 APK</title>
-      <link href="/2025/03/22/decodeapk/"/>
-      <url>/2025/03/22/decodeapk/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Android逆向"><a href="#Android逆向" class="headerlink" title="Android逆向"></a>Android逆向</h1><h2 id="反编译APK"><a href="#反编译APK" class="headerlink" title="反编译APK"></a>反编译APK</h2><h3 id="工具介绍"><a href="#工具介绍" class="headerlink" title="工具介绍"></a>工具介绍</h3><p>如果只是想拿到apk中的图片资源，只需要将apk后缀改为zip然后解压缩，<strong>res</strong>目录中就包含了所有的资源文件</p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/releasezip.png"></p><p><strong>classes.dex</strong> 则包含了所有的代码，只是还无法查看</p><p><strong>AndroidManifest.xml</strong> 文件打开会发现无法阅读，都是16进制数</p><p>此时就需要用到工具 —— ApkTool</p><h4 id="ApkTool"><a href="#ApkTool" class="headerlink" title="ApkTool"></a>ApkTool</h4><h5 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h5><p><a href="https://apktool.org/">ApkTool官网</a></p><h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/apktooldocs.png"></p><h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool d xxx.apk</span><br></pre></td></tr></table></figure><blockquote><p>d 表示 decode</p><p>还可以加上一些附加参数来控制 decode 行为：</p><p>-f ：如果目标文件夹已存在，则强制删除现有文件夹（默认如果目标文件夹已存在，则解码失败）</p><p>-o ：指定解码目标文件夹的名称（默认使用 APK 文件的名字来命名目标文件夹）</p><p>-s ：不反编译dex文件，也就是说 classes.dex 文件会被保留（默认会将 dex 文件解码成 smali 文件）</p><p>-r ：不反编译资源文件，也就是说 resources.arsc 文件会被保留（默认会将 resources.arsc 解码成具体的资源文件）</p></blockquote><p>反编译之后会得到以下内容：</p><ul><li>1、AndroidManifest.xml：经过反编译还原后的 manifest 文件</li><li>2、original 文件夹：存放了未经反编译过、原始的 AndroidManifest.xml 文件</li><li>3、res 文件夹：存放了反编译出来的所有资源</li><li>4、smali 文件夹：存放了反编译出来的所有代码，只不过格式都是<code>.smali</code>类型的</li></ul><p>xml文件已经可以看懂了，不过 smali 类型文件我们依然无法阅读</p><p>此时，需要用到另一个工具 —— dex2jar + jd-gui</p><h4 id="dex2jar"><a href="#dex2jar" class="headerlink" title="dex2jar"></a>dex2jar</h4><h5 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h5><p>将 dex 转换成 jar 形式文件</p><h5 id="下载-1"><a href="#下载-1" class="headerlink" title="下载"></a>下载</h5><p><a href="https://sourceforge.net/projects/dex2jar/files/">dex2jar官网</a></p><h5 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h5><p>将下载的 dex2jar 压缩包解压后，可以看到以下内容</p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/dex2jar.png"></p><p>windows上使用dex2jar.bat即可</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dex2jar.bat classes.dex路径</span><br></pre></td></tr></table></figure><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/dexcontent.png"></p><p>看到上述console则表示成功</p><p>代码都位于 classes-dex2jar.jar 中</p><p>现在需要用到另一款工具 jd-gui</p><h4 id="jd-gui"><a href="#jd-gui" class="headerlink" title="jd-gui"></a>jd-gui</h4><h5 id="下载-2"><a href="#下载-2" class="headerlink" title="下载"></a>下载</h5><p><a href="https://java-decompiler.github.io/">jd-gui官网</a></p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/jdgui.png"></p><p>根据需要下载对应包即可</p><h5 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h5><p><img src="C:\Users\bamboo\AppData\Roaming\Typora\typora-user-images\image-20250327145549112.png" alt="image-20250327145549112"></p><p>解压到本地，双击jd-gui.exe文件即可运行</p><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/jarcontent.png"></p><p>用jd-gui打开之前解压出来的dex文件即可看到所有的源码</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 学习 </category>
-          
-          <category> 逆向工程 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 安卓 </tag>
-            
-            <tag> Decode </tag>
             
         </tags>
       
