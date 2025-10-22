@@ -4,6 +4,58 @@
   
     
     <entry>
+      <title>修改键盘F9为Home键</title>
+      <link href="/2025/10/22/changekey/"/>
+      <url>/2025/10/22/changekey/</url>
+      
+        <content type="html"><![CDATA[<h2 id="修改键盘F9键功能-将其映射为HOME键"><a href="#修改键盘F9键功能-将其映射为HOME键" class="headerlink" title="修改键盘F9键功能,将其映射为HOME键"></a>修改键盘F9键功能,将其映射为HOME键</h2><blockquote><p>由于键盘是75键, 本身不具备HOME键, 但是日常和工作对HOME键还是挺有需要的(别问为什么不买全键的, 个人不太喜欢数字区, 对75键构造独钟)</p></blockquote><p>回归正题, 如何实现</p><p>我采用的是修改注册表方式</p><p>网上能搜到比较多方案, 除了注册表, 一般都需要下载额外软件, 键盘驱动或者是windows软件来将按键功能映射为其他</p><p>所以, 修改注册表, 省时省力</p><h3 id="修改注册表"><a href="#修改注册表" class="headerlink" title="修改注册表"></a>修改注册表</h3><p>1.打开注册表</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 按下键盘上 win + r 并输入</span></span><br><span class="line">regidit</span><br></pre></td></tr></table></figure><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/regidit.png"></p><p>2.定位到按键修改路径</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout</span><br></pre></td></tr></table></figure><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/inregidit.png"></p><p>3.在右侧区域新建二进制值 -&gt; 命名为 Scancode Map, 并填入下列值</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">00 00 00 00 00 00 00 00</span><br><span class="line">02 00 00 00 47 E0 43 00</span><br><span class="line">00 00 00 00 00 00 00 00</span><br></pre></td></tr></table></figure><p><img src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/binaryvalue.png"></p><p>4.点击确定, 退出注册表, 重启电脑, 永久生效👍</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 效率 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 技巧 </tag>
+            
+            <tag> 方法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【每日早报】</title>
+      <link href="/2025/10/22/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/"/>
+      <url>/2025/10/22/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/</url>
+      
+        <content type="html"><![CDATA[<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>每日早报</title></head><body>    <div style="text-align: center;"> <img src="https://file.alapi.cn/60s/202510221761074102.png"            alt="每日早报" width="100%"> </div></body></html>]]></content>
+      
+      
+      <categories>
+          
+          <category> 每日早报 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 每日早报 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>考研常识</title>
       <link href="/2025/08/29/%E8%80%83%E7%A0%94%E5%B8%B8%E8%AF%86/"/>
       <url>/2025/08/29/%E8%80%83%E7%A0%94%E5%B8%B8%E8%AF%86/</url>
@@ -21,31 +73,6 @@
         <tags>
             
             <tag> 考研 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>【每日早报】</title>
-      <link href="/2025/08/29/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/"/>
-      <url>/2025/08/29/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/</url>
-      
-        <content type="html"><![CDATA[<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>每日早报</title></head><body>    <div style="text-align: center;"> <img src="https://file.alapi.cn/60s/202508291756409402.png"            alt="每日早报" width="100%"> </div></body></html>]]></content>
-      
-      
-      <categories>
-          
-          <category> 每日早报 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 每日早报 </tag>
             
         </tags>
       
