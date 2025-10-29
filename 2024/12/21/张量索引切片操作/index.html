@@ -1,0 +1,621 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>张量索引切片操作 | 扳布屋</title><meta name="keywords" content="人工智能,张量,运算,Pytorch"><meta name="author" content="Bamboo"><meta name="copyright" content="Bamboo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#18171d"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="张量索引切片操作"><meta name="application-name" content="张量索引切片操作"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#18171d"><meta property="og:type" content="article"><meta property="og:title" content="张量索引切片操作"><meta property="og:url" content="https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/index.html"><meta property="og:site_name" content="扳布屋"><meta property="og:description" content="由于Pytorch中张量索引操作较多, 有时会在连续的网络层变化中迷失, 所以对常见操作进行一些归纳, 时不时巩固"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/tensor.png"><meta property="article:author" content="Bamboo"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/tensor.png"><meta name="description" content="由于Pytorch中张量索引操作较多, 有时会在连续的网络层变化中迷失, 所以对常见操作进行一些归纳, 时不时巩固"><link rel="shortcut icon" href="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/sun.png"><link rel="canonical" href="https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🔍 分享与热心帮助","🏠 智能家居小能手","🔨 设计开发一条龙","🤝 专修交互与设计","🏃 脚踏实地行动派","🧱 团队小组发动机","💢 壮汉人狠话不多"]},
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    simplehomepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Bamboo","link":"链接: ","source":"来源: 扳布屋","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '扳布屋',
+  title: '张量索引切片操作',
+  postAI: '',
+  pageFillDescription: '1. 基本下标与切片（Python 风格）, 2. 使用 None x2F np.newaxis（增加维度）, 3. 布尔掩码（Boolean Masking）, 4. 花式索引（整数数组索引 x2F Advanced Indexing）, 5. 广播与索引（注意形状）, 6. gather 与 scatter（按索引收集x2F写入适用于高维批量操作）, 7. index_select x2F take（按维度选择）, 8. masked_fill where（掩码赋值 x2F 条件选择）, 9. unsqueeze x2F squeeze 与 view/reshape（维度控制）, 10. Ellipsis ...（省略号）, 11. 多维返回与维度插入（保持x2F丢失维度）, 12. 视图（view）与 copy（内存x2Fcontiguous）相关注意, 13. 反向传播（autograd）相关, 14. 常见用途与模式（实战片段）, 15. 进阶：einsum 作为灵活替代（当索引和 reshape 太繁琐）, 16. 常见陷阱与建议, 17. 一张速查小表（常用 API）大致按照使用频率递减给出这里可以给出一个结论性的规律便于判断张量形状索引操作时有几个就有几个维度基本下标与切片风格标量第一维取出所有第二个省略号等价于等价于切片语法支持含不含支持负数索引和步长例如会在中间维度上反转顺序返回还是取决于实现在中会返回使用增加维度常用于把向量转为列行以便广播布尔掩码输出丢失原信息等价于当是多维且与同时结果是扁平的张量按行主序提取元素可用于筛样本实现掩码筛选等花式索引整数数组索引按行选择按列选择对应元素选择取和若使用多个整数索引同维度会进行逐元素配对索引输出长度等于索引数组长度若混合切片和整数数组索引规则稍复杂整数索引会先被应用结果维度位置会消失或变为新维度例多维用于第维用于第维逐对索引等价于广播与索引注意形状每对应列取值为与配对取和常用于按选择每个样本对应的索引如分类预测的判断与按索引收集写入适用于高维批量操作示例从中按收集需要指定要求与在除了外的维度完全相同返回与同形状的张量常用于实现按位置取值例如按预测索引从概率张量中取值用于把值写入指定位置可做化或累积有参数按维度选择对于矩阵按行选返回的顺序与索引一致与相似但有些后端实现行为细微不同比如保留性掩码赋值条件选择把负数置条件选择相当于返回与广播后的形状相同的张量与维度控制恢复只在指定维度为时删除该维度会改变内存视图要求连续在必要时会复制省略号等价等价在不确定前面后面维度数时非常有用特别是在写通用层时多维返回与维度插入保持丢失维度使用整数索引会减少维度那一维被消除使用切片或或保持长度为的索引会保留维度示例整数索引去掉第维切片保留第维用长度的索引数组也保留视图与内存相关注意大多数简单切片和整型索引会返回原张量的共享内存但有些操作会返回例如带负步长的切片某些高级索引可以检查是否连续若对返回的张量执行可能会报错需先可能是不连续可能安全在操作如时如果与原张量共享内存可能会影响原张量对则无影响反向传播相关索引切片会保留计算图信息如果原张量因此从张量中取出的部分仍可对原张量反向传播但是用高级索引赋值不记录梯度需要使用或构造新的张量再计算可以切断梯度传播例如示例反向传播影响会为累积梯度但为常见用途与模式实战片段按取样分类概率取预测值如果想从中收集每个对应预测的概率长短不一表示有效通过做池化按索引更新参数与更新内部就是高级索引实现进阶作为灵活替代当索引和太繁琐可以在一次表达式中完成复杂的通道维度重新排列与约简可替代多个操作例批量矩阵乘积常见陷阱与建议整数数组索引通常会返回非这会影响内存并且后续修改不会影响原张量带负步长的切片常常产生要注意混合使用布尔掩码与维度不适配会报错确保与被掩的张量形状一致或能广播不要对需要的部分用原地替换会破坏计算图使用或构造新张量索引返回的张量可能会改变梯度分配只有被实际用到参与的元素才会有梯度尽量用实现批量按位置索引可保持形状且直观而不是复杂的循环一张速查小表常用基本维度选择花式布尔掩码其他用于构建索引如果你愿意我可以把这些示例做成一个可以直接运行的包含针对常见错误的测试用例或者根据你常用的框架把示例改写成你习惯的或针对你当前代码中的索引问题把你代码贴来帮你找并修正你想要哪种后续帮助',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-28 13:31:01',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 24
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200&display=swap" rel="stylesheet"><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/95e0192bf498a666a4a401e3fad6237.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><div class="back-home-button"><i class="anzhiyufont anzhiyu-icon-grip-vertical"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div></div><a id="site-name" href="/" accesskey="h"><div class="title">扳布屋</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a><div id="he-plugin-simple"></div><script>var WIDGET = {
+  "CONFIG": {
+    "modules": "0124",
+    "background": "2",
+    "tmpColor": "FFFFFF",
+    "tmpSize": "16",
+    "cityColor": "FFFFFF",
+    "citySize": "16",
+    "aqiColor": "E8D87B",
+    "aqiSize": "16",
+    "weatherIconSize": "24",
+    "alertIconSize": "18",
+    "padding": "10px 10px 10px 10px",
+    "shadow": "0",
+    "language": "auto",
+    "borderRadius": "20",
+    "fixed": "true",
+    "vertical": "top",
+    "horizontal": "left",
+    "left": "20",
+    "top": "7.1",
+    "key": "df245676fb434a0691ead1c63341cd94"
+  }
+}
+</script><link rel="stylesheet" href="https://widget.qweather.net/simple/static/css/he-simple.css?v=1.4.0"/><script src="https://widget.qweather.net/simple/static/js/he-simple.js?v=1.4.0"></script></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=8283048318&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button only-home" id="travellings_button" title="随机前往一个开往项目网站"><a class="site-page" onclick="anzhiyu.totraveling()" title="随机前往一个开往项目网站" href="javascript:void(0);" rel="external nofollow" data-pjax-state="external"><i class="anzhiyufont anzhiyu-icon-train"></i></a></div><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Decode/" style="font-size: 1.05rem;">Decode<sup>1</sup></a><a href="/tags/Pytorch/" style="font-size: 1.05rem;">Pytorch<sup>1</sup></a><a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.05rem;">人工智能<sup>2</sup></a><a href="/tags/%E5%81%A5%E5%BA%B7/" style="font-size: 1.05rem;">健康<sup>1</sup></a><a href="/tags/%E5%91%BD%E4%BB%A4/" style="font-size: 1.05rem;">命令<sup>1</sup></a><a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 1.05rem;">学习<sup>1</sup></a><a href="/tags/%E5%AE%89%E5%8D%93/" style="font-size: 1.05rem;">安卓<sup>1</sup></a><a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 1.05rem;">工具<sup>1</sup></a><a href="/tags/%E5%BC%A0%E9%87%8F/" style="font-size: 1.05rem;">张量<sup>1</sup></a><a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 1.05rem;">技巧<sup>2</sup></a><a href="/tags/%E6%96%87%E7%AB%A0/" style="font-size: 1.05rem;">文章<sup>1</sup></a><a href="/tags/%E6%96%B9%E6%B3%95/" style="font-size: 1.05rem;">方法<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 1.05rem;">架构<sup>1</sup></a><a href="/tags/%E6%A8%A1%E5%9E%8B/" style="font-size: 1.05rem;">模型<sup>1</sup></a><a href="/tags/%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5/" style="font-size: 1.05rem;">每日早报<sup>1</sup></a><a href="/tags/%E8%BF%90%E7%AE%97/" style="font-size: 1.05rem;">运算<sup>1</sup></a><a href="/tags/%E9%9A%8F%E6%89%8B%E4%B8%80%E8%AE%B0/" style="font-size: 1.05rem;">随手一记<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/03/"><span class="card-archive-list-date">三月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">十二月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" itemprop="url">大模型</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>人工智能</span></a><a class="article-meta__tags" href="/tags/%E5%BC%A0%E9%87%8F/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>张量</span></a><a class="article-meta__tags" href="/tags/%E8%BF%90%E7%AE%97/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>运算</span></a><a class="article-meta__tags" href="/tags/Pytorch/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Pytorch</span></a></span></div></div><h1 class="post-title" itemprop="name headline">张量索引切片操作</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2024-12-20T19:38:58.000Z" title="发表于 2024-12-21 03:38:58">2024-12-21</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-10-28T05:31:01.928Z" title="更新于 2025-10-28 13:31:01">2025-10-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">2k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="张量索引切片操作"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为杭州"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>杭州</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/tensor.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/"><header><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" itemprop="url">大模型</a><a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" tabindex="-1" itemprop="url">人工智能</a><a href="/tags/%E5%BC%A0%E9%87%8F/" tabindex="-1" itemprop="url">张量</a><a href="/tags/%E8%BF%90%E7%AE%97/" tabindex="-1" itemprop="url">运算</a><a href="/tags/Pytorch/" tabindex="-1" itemprop="url">Pytorch</a><h1 id="CrawlerTitle" itemprop="name headline">张量索引切片操作</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Bamboo</span><time itemprop="dateCreated datePublished" datetime="2024-12-20T19:38:58.000Z" title="发表于 2024-12-21 03:38:58">2024-12-21</time><time itemprop="dateCreated datePublished" datetime="2025-10-28T05:31:01.928Z" title="更新于 2025-10-28 13:31:01">2025-10-28</time></header><blockquote>
+<p>大致按照使用频率递减给出</p>
+</blockquote>
+<blockquote>
+<p><strong>这里可以给出一个结论性的规律, 便于判断张量形状, 索引操作时, 有几个 : , 就有几个维度</strong></p>
+</blockquote>
+<h1 id="1-基本下标与切片（Python-风格）"><a href="#1-基本下标与切片（Python-风格）" class="headerlink" title="1. 基本下标与切片（Python 风格）"></a>1. 基本下标与切片（Python 风格）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">x = torch.arange(<span class="number">24</span>).reshape(<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)  <span class="comment"># shape (2,3,4)</span></span><br><span class="line"><span class="comment"># x[batch, row, col]</span></span><br><span class="line">x[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]        <span class="comment"># 标量 tensor(0)</span></span><br><span class="line">x[<span class="number">0</span>, :, :]      <span class="comment"># 第一维=0，取出 shape (3,4)</span></span><br><span class="line">x[:, <span class="number">1</span>, :]      <span class="comment"># 所有batch, 第二个row -&gt; shape (2,4)</span></span><br><span class="line">x[..., <span class="number">2</span>]       <span class="comment"># 省略号，等价于 x[:, :, 2] -&gt; shape (2,3)</span></span><br><span class="line">x[<span class="number">0</span>]            <span class="comment"># 等价于 x[0, :, :] -&gt; shape (3,4)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>切片语法支持 <code>start:stop:step</code>（含 start，不含 stop），支持负数索引和步长。</li>
+<li>例如 <code>x[:, ::-1, :]</code> 会在中间维度上反转顺序（返回 view 还是 copy 取决于实现；在 PyTorch 中 negative step 会返回 copy）。</li>
+</ul>
+<h1 id="2-使用-None-np-newaxis（增加维度）"><a href="#2-使用-None-np-newaxis（增加维度）" class="headerlink" title="2. 使用 None &#x2F; np.newaxis（增加维度）"></a>2. 使用 <code>None</code> &#x2F; <code>np.newaxis</code>（增加维度）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">y = torch.tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])        <span class="comment"># shape (3,)</span></span><br><span class="line">y[<span class="literal">None</span>, :]      <span class="comment"># shape (1,3)</span></span><br><span class="line">y[:, <span class="literal">None</span>]      <span class="comment"># shape (3,1)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常用于把向量转为列&#x2F;行以便广播。</li>
+</ul>
+<h1 id="3-布尔掩码（Boolean-Masking）"><a href="#3-布尔掩码（Boolean-Masking）" class="headerlink" title="3. 布尔掩码（Boolean Masking）"></a>3. 布尔掩码（Boolean Masking）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">0</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">3</span>])</span><br><span class="line">mask = a &gt; <span class="number">3</span>                 <span class="comment"># tensor([False, True, False, True, False])</span></span><br><span class="line">a[mask]                     <span class="comment"># tensor([5,7])  -&gt; 1D 输出，丢失原shape信息</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>masked_select(a, mask)</code> 等价于 <code>a[mask]</code>。</li>
+<li>当 mask 是多维且与 a 同 shape 时，结果是扁平的 1D 张量（按行主序提取元素）。</li>
+<li>可用于筛样本、实现 padding 掩码筛选等。</li>
+</ul>
+<h1 id="4-花式索引（整数数组索引-Advanced-Indexing）"><a href="#4-花式索引（整数数组索引-Advanced-Indexing）" class="headerlink" title="4. 花式索引（整数数组索引 &#x2F; Advanced Indexing）"></a>4. 花式索引（整数数组索引 &#x2F; Advanced Indexing）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">M = torch.arange(<span class="number">12</span>).reshape(<span class="number">3</span>,<span class="number">4</span>)  <span class="comment"># shape (3,4)</span></span><br><span class="line">rows = torch.tensor([<span class="number">2</span>,<span class="number">0</span>])</span><br><span class="line">cols = torch.tensor([<span class="number">1</span>,<span class="number">3</span>])</span><br><span class="line">M[rows]           <span class="comment"># 按行选择 -&gt; shape (2,4)</span></span><br><span class="line">M[:, cols]        <span class="comment"># 按列选择 -&gt; shape (3,2)</span></span><br><span class="line"><span class="comment"># 对应元素选择（pairwise）</span></span><br><span class="line">M[rows, cols]     <span class="comment"># 取 (2,1) 和 (0,3) -&gt; shape (2,)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若使用多个 1D 整数索引（同维度），会进行<strong>逐元素配对</strong>索引，输出长度等于索引数组长度。</li>
+<li>若混合切片和整数数组索引，规则稍复杂：整数索引会先被应用，结果维度位置会消失或变为新维度。</li>
+</ul>
+<p>例（多维）：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T = torch.arange(<span class="number">2</span>*<span class="number">3</span>*<span class="number">4</span>).reshape(<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">idx0 = torch.tensor([<span class="number">0</span>,<span class="number">1</span>])    <span class="comment"># 用于第0维</span></span><br><span class="line">idx1 = torch.tensor([<span class="number">2</span>,<span class="number">0</span>])    <span class="comment"># 用于第1维</span></span><br><span class="line">T[idx0, idx1]    <span class="comment"># 逐对索引 -&gt; shape (2,4)</span></span><br><span class="line"><span class="comment"># 等价于: torch.stack([T[0,2], T[1,0]], dim=0)</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-广播与索引（注意形状）"><a href="#5-广播与索引（注意形状）" class="headerlink" title="5. 广播与索引（注意形状）"></a>5. 广播与索引（注意形状）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A = torch.arange(<span class="number">6</span>).reshape(<span class="number">2</span>,<span class="number">3</span>)  <span class="comment"># (2,3)</span></span><br><span class="line">idx = torch.tensor([<span class="number">0</span>,<span class="number">2</span>])         <span class="comment"># (2,)</span></span><br><span class="line">A[torch.arange(<span class="number">2</span>), idx]           <span class="comment"># (2,) -&gt; 每 batch 对应列取值</span></span><br><span class="line"><span class="comment"># torch.arange(2) 为 [0,1]，与 idx 配对 -&gt; 取 (0,0) 和 (1,2)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常用于按-batch 选择每个样本对应的索引（如分类预测的 top-k 判断）。</li>
+</ul>
+<h1 id="6-gather-与-scatter（按索引收集-写入，适用于高维批量操作）"><a href="#6-gather-与-scatter（按索引收集-写入，适用于高维批量操作）" class="headerlink" title="6. gather 与 scatter（按索引收集&#x2F;写入，适用于高维批量操作）"></a>6. <code>gather</code> 与 <code>scatter</code>（按索引收集&#x2F;写入，适用于高维批量操作）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gather 示例：从 src 中按 index 收集（需要指定 dim）</span></span><br><span class="line">src = torch.tensor([[<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>],[<span class="number">20</span>,<span class="number">21</span>,<span class="number">22</span>]])   <span class="comment"># shape (2,3)</span></span><br><span class="line">index = torch.tensor([[<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>]])       <span class="comment"># shape (2,3)</span></span><br><span class="line">torch.gather(src, dim=<span class="number">1</span>, index=index)</span><br><span class="line"><span class="comment"># -&gt; shape (2,3): [[12,11,10],[20,22,21]]</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>gather</code> 要求 <code>index</code> 与 <code>src</code> 在除了 <code>dim</code> 外的维度完全相同；返回与 <code>index</code> 同形状的张量。</li>
+<li>常用于实现按位置取值（例如 beam-search、按预测索引从概率张量中取值）。</li>
+<li><code>scatter_</code>&#x2F;<code>scatter</code> 用于把值写入指定位置，可做 one-hot 化或累积（有 <code>reduce</code> 参数）。</li>
+</ul>
+<h1 id="7-index-select-take（按维度选择）"><a href="#7-index-select-take（按维度选择）" class="headerlink" title="7. index_select &#x2F; take（按维度选择）"></a>7. <code>index_select</code> &#x2F; <code>take</code>（按维度选择）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">v = torch.tensor([<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>])</span><br><span class="line">torch.index_select(v, dim=<span class="number">0</span>, index=torch.tensor([<span class="number">3</span>,<span class="number">1</span>]))  <span class="comment"># tensor([40,20])</span></span><br><span class="line"><span class="comment"># 对于矩阵按行选：</span></span><br><span class="line">M = torch.arange(<span class="number">12</span>).reshape(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">torch.index_select(M, dim=<span class="number">0</span>, index=torch.tensor([<span class="number">2</span>,<span class="number">0</span>]))  <span class="comment"># shape (2,4)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>index_select</code> 返回的顺序与索引一致；与 fancy indexing（<code>M[idx]</code>）相似，但有些后端实现行为细微不同（比如保留 contiguous 性）。</li>
+</ul>
+<h1 id="8-masked-fill-where（掩码赋值-条件选择）"><a href="#8-masked-fill-where（掩码赋值-条件选择）" class="headerlink" title="8. masked_fill, where（掩码赋值 &#x2F; 条件选择）"></a>8. <code>masked_fill</code>, <code>where</code>（掩码赋值 &#x2F; 条件选择）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">1.</span>, -<span class="number">2.</span>, <span class="number">3.</span>])</span><br><span class="line">x.masked_fill(x &lt; <span class="number">0</span>, <span class="number">0.</span>)    <span class="comment"># 把负数置0</span></span><br><span class="line">torch.where(x&gt;<span class="number">0</span>, x, torch.zeros_like(x))  <span class="comment"># 条件选择，相当于 np.where</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>where(cond, A, B)</code> 返回与 <code>A</code>&#x2F;<code>B</code> 广播后的形状相同的张量。</li>
+</ul>
+<h1 id="9-unsqueeze-squeeze-与-view-reshape（维度控制）"><a href="#9-unsqueeze-squeeze-与-view-reshape（维度控制）" class="headerlink" title="9. unsqueeze &#x2F; squeeze 与 view/reshape（维度控制）"></a>9. <code>unsqueeze</code> &#x2F; <code>squeeze</code> 与 <code>view/reshape</code>（维度控制）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = torch.tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])      <span class="comment"># (3,)</span></span><br><span class="line">a.unsqueeze(<span class="number">0</span>)                 <span class="comment"># (1,3)</span></span><br><span class="line">a.unsqueeze(<span class="number">1</span>)                 <span class="comment"># (3,1)</span></span><br><span class="line">torch.squeeze(a.unsqueeze(<span class="number">0</span>))  <span class="comment"># 恢复</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>squeeze(dim)</code> 只在指定维度为 1 时删除该维度。</li>
+<li><code>reshape</code>&#x2F;<code>view</code> 会改变内存视图（<code>view</code> 要求连续 contiguous；<code>reshape</code> 在必要时会复制）。</li>
+</ul>
+<h1 id="10-Ellipsis-（省略号）"><a href="#10-Ellipsis-（省略号）" class="headerlink" title="10. Ellipsis ...（省略号）"></a>10. Ellipsis <code>...</code>（省略号）</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">X = torch.randn(<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>)</span><br><span class="line">X[..., <span class="number">0</span>]   <span class="comment"># 等价 X[:, :, :, 0]</span></span><br><span class="line">X[<span class="number">0</span>, ...]   <span class="comment"># 等价 X[0, :, :, :]</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在不确定前面&#x2F;后面维度数时非常有用，特别是在写通用层时。</li>
+</ul>
+<h1 id="11-多维返回与维度插入（保持-丢失维度）"><a href="#11-多维返回与维度插入（保持-丢失维度）" class="headerlink" title="11. 多维返回与维度插入（保持&#x2F;丢失维度）"></a>11. 多维返回与维度插入（保持&#x2F;丢失维度）</h1><ul>
+<li>使用整数索引会<strong>减少</strong>维度（那一维被消除）；</li>
+<li>使用切片或 <code>None</code>，或保持长度为 1 的索引会保留维度。<br> 示例：</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t = torch.randn(<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">t[<span class="number">0</span>].shape        <span class="comment"># (3,4)   -- 整数索引去掉第0维</span></span><br><span class="line">t[<span class="number">0</span>:<span class="number">1</span>].shape      <span class="comment"># (1,3,4) -- 切片保留第0维</span></span><br><span class="line">t[[<span class="number">0</span>]].shape      <span class="comment"># (1,3,4) -- 用长度1的索引数组也保留</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="12-视图（view）与-copy（内存-contiguous）相关注意"><a href="#12-视图（view）与-copy（内存-contiguous）相关注意" class="headerlink" title="12. 视图（view）与 copy（内存&#x2F;contiguous）相关注意"></a>12. 视图（view）与 copy（内存&#x2F;contiguous）相关注意</h1><ul>
+<li>大多数简单切片和整型索引会返回<strong>原张量的 view（共享内存）</strong>，但有些操作会返回 <strong>copy</strong>（例如带负步长的切片、某些高级索引）。</li>
+<li><code>is_contiguous()</code> 可以检查是否连续。若对返回的张量执行 <code>view()</code> 可能会报错，需先 <code>.contiguous()</code>。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s = torch.arange(<span class="number">6</span>).reshape(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">t = s[:, ::-<span class="number">1</span>]           <span class="comment"># 可能是 copy（不连续）</span></span><br><span class="line">t.is_contiguous()       <span class="comment"># 可能 False</span></span><br><span class="line">t.contiguous().view(-<span class="number">1</span>) <span class="comment"># 安全</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 in-place 操作（如 <code>t += 1</code>）时，如果 t 与原张量共享内存，可能会影响原张量；对 copy 则无影响。</li>
+</ul>
+<h1 id="13-反向传播（autograd）相关"><a href="#13-反向传播（autograd）相关" class="headerlink" title="13. 反向传播（autograd）相关"></a>13. 反向传播（autograd）相关</h1><ul>
+<li>索引、切片会保留计算图信息（如果原张量 <code>requires_grad=True</code>），因此从张量中取出的部分仍可对原张量反向传播。</li>
+<li>但是，用高级索引赋值（<code>x[idx] = something</code>）不记录梯度；需要使用 <code>scatter</code> 或构造新的张量再计算 loss。</li>
+<li><code>detach()</code> 可以切断梯度传播（例如 <code>x = x.detach()</code>）。</li>
+</ul>
+<p>示例（反向传播影响）：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(<span class="number">3</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = x[<span class="number">1</span>] * <span class="number">2</span></span><br><span class="line">y.backward()           <span class="comment"># 会为 x[1] 累积梯度，但 x[0], x[2] 为 0</span></span><br><span class="line">x.grad                <span class="comment"># tensor([0., 2., 0.])</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="14-常见用途与模式（实战片段）"><a href="#14-常见用途与模式（实战片段）" class="headerlink" title="14. 常见用途与模式（实战片段）"></a>14. 常见用途与模式（实战片段）</h1><ul>
+<li><strong>按 batch 取样</strong>（分类概率取预测值）：</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">probs = torch.randn(<span class="number">32</span>, <span class="number">10</span>)  <span class="comment"># logits or probs</span></span><br><span class="line">pred = probs.argmax(dim=<span class="number">1</span>)   <span class="comment"># (32,)</span></span><br><span class="line"><span class="comment"># 如果想从 probs 中收集每个 batch 对应预测的概率：</span></span><br><span class="line">selected = probs[torch.arange(<span class="number">32</span>), pred]  <span class="comment"># shape (32,)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>padding mask</strong>（seq 长短不一）：</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">seq = torch.randint(<span class="number">0</span>, <span class="number">100</span>, (<span class="number">4</span>,<span class="number">7</span>))   <span class="comment"># batch, seq_len</span></span><br><span class="line">mask = (seq != PAD_TOKEN)            <span class="comment"># True 表示有效</span></span><br><span class="line"><span class="comment"># 通过 mask 做池化：</span></span><br><span class="line">masked_sum = (embeddings * mask.unsqueeze(-<span class="number">1</span>)).<span class="built_in">sum</span>(dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>one-hot</strong>：</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">idx = torch.tensor([<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>])</span><br><span class="line">onehot = torch.nn.functional.one_hot(idx, num_classes=<span class="number">4</span>)  <span class="comment"># shape (3,4)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>按索引更新参数</strong>（embedding lookup 与更新）：</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">embedding = torch.nn.Embedding(num_embeddings=<span class="number">1000</span>, embedding_dim=<span class="number">64</span>)</span><br><span class="line">out = embedding(idx_tensor)   <span class="comment"># embedding 内部就是高级索引/ gather 实现</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="15-进阶：einsum-作为灵活替代（当索引和-reshape-太繁琐）"><a href="#15-进阶：einsum-作为灵活替代（当索引和-reshape-太繁琐）" class="headerlink" title="15. 进阶：einsum 作为灵活替代（当索引和 reshape 太繁琐）"></a>15. 进阶：<code>einsum</code> 作为灵活替代（当索引和 reshape 太繁琐）</h1><ul>
+<li><code>einsum</code> 可以在一次表达式中完成复杂的通道&#x2F;维度重新排列与约简，可替代多个 <code>transpose</code> + <code>matmul</code> 操作。</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例：批量矩阵乘积 sum over k: c_&#123;ij&#125; = sum_k a_&#123;ik&#125; b_&#123;jk&#125;</span></span><br><span class="line">torch.einsum(<span class="string">&#x27;ik,jk-&gt;ij&#x27;</span>, a, b)</span><br></pre></td></tr></table></figure>
+
+<h1 id="16-常见陷阱与建议"><a href="#16-常见陷阱与建议" class="headerlink" title="16. 常见陷阱与建议"></a>16. 常见陷阱与建议</h1><ol>
+<li><strong>整数数组索引通常会返回 copy（非 view）</strong> —— 这会影响内存并且后续 in-place 修改不会影响原张量。</li>
+<li><strong>带负步长的切片常常产生 copy</strong>，要注意 <code>is_contiguous()</code>。</li>
+<li><strong>混合使用布尔掩码与维度不适配会报错</strong>，确保 mask 与被掩的张量形状一致或能广播。</li>
+<li><strong>不要对需要 autograd 的部分用原地替换（x[idx] &#x3D; …）</strong>，会破坏计算图，使用 <code>scatter</code>&#x2F;<code>scatter_add</code> 或构造新张量。</li>
+<li><strong>索引返回的张量可能会改变梯度分配</strong>，只有被实际用到（参与 loss）的元素才会有梯度。</li>
+<li><strong>尽量用 <code>gather</code> 实现批量按位置索引</strong>（可保持形状且直观），而不是复杂的循环。</li>
+</ol>
+<h1 id="17-一张速查小表（常用-API）"><a href="#17-一张速查小表（常用-API）" class="headerlink" title="17. 一张速查小表（常用 API）"></a>17. 一张速查小表（常用 API）</h1><ul>
+<li>基本：<code>x[i]</code>, <code>x[:, j]</code>, <code>x[..., k]</code>, <code>x[start:stop:step]</code></li>
+<li>维度：<code>unsqueeze</code>, <code>squeeze</code>, <code>transpose</code>, <code>permute</code>, <code>reshape</code>, <code>view</code>, <code>contiguous</code></li>
+<li>选择&#x2F;花式：<code>index_select</code>, <code>take</code>, <code>gather</code>, <code>scatter</code>, <code>where</code>, <code>masked_select</code>, <code>masked_fill</code></li>
+<li>布尔&#x2F;掩码：<code>x[mask]</code>, <code>torch.where</code>, <code>torch.nonzero</code></li>
+<li>其他：<code>one_hot</code>, <code>topk</code>, <code>argmax/argmin</code>, <code>torch.arange</code>（用于构建 batch 索引）</li>
+</ul>
+<hr>
+<p>如果你愿意，我可以：</p>
+<ul>
+<li>把这些示例做成一个可以直接运行的 Jupyter notebook（包含针对常见错误的测试用例），或者</li>
+<li>根据你常用的框架（PyTorch &#x2F; TensorFlow &#x2F; NumPy）把示例改写成你习惯的 API，或</li>
+<li>针对你当前代码中的索引问题（把你代码贴来），帮你找 bug 并修正。</li>
+</ul>
+<p>你想要哪种后续帮助？</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/bamboo.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/bamboo.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Bamboo</div><div class="post-copyright__author_desc">纵有疾风起，人生不言弃</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/')">张量索引切片操作</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=张量索引切片操作&amp;url=https://climbingmouse.github.io/2024/12/21/%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/&amp;pic=https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/tensor.png" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://climbingmouse.github.io" target="_blank">扳布屋</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>人工智能<span class="tagsPageCount">2</span></a><a class="post-meta__box__tags" href="/tags/%E5%BC%A0%E9%87%8F/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>张量<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E8%BF%90%E7%AE%97/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>运算<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/Pytorch/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Pytorch<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://file.alapi.cn/60s/202510291761678902_head.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/12/21/someskills/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/jiqiao.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">小技巧</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2024/12/21/Transfomer/" title="Transformer"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/transformer.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-12-21</div><div class="title">Transformer</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/bamboo.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/08/24/64e6ce9c507bb.png" alt="status"/></div></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);"><b style="color:#fff">愿有所获</b></div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Bamboo</h1><div class="author-info__desc">纵有疾风起，人生不言弃</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/anzhiyu-c" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/372204786" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);"><b style="font-size:20px;color:#19CAAD;">事以密成，语以泄败 。</b></div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);"></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E4%B8%8B%E6%A0%87%E4%B8%8E%E5%88%87%E7%89%87%EF%BC%88Python-%E9%A3%8E%E6%A0%BC%EF%BC%89"><span class="toc-text">1. 基本下标与切片（Python 风格）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8-None-np-newaxis%EF%BC%88%E5%A2%9E%E5%8A%A0%E7%BB%B4%E5%BA%A6%EF%BC%89"><span class="toc-text">2. 使用 None &#x2F; np.newaxis（增加维度）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%B8%83%E5%B0%94%E6%8E%A9%E7%A0%81%EF%BC%88Boolean-Masking%EF%BC%89"><span class="toc-text">3. 布尔掩码（Boolean Masking）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%8A%B1%E5%BC%8F%E7%B4%A2%E5%BC%95%EF%BC%88%E6%95%B4%E6%95%B0%E6%95%B0%E7%BB%84%E7%B4%A2%E5%BC%95-Advanced-Indexing%EF%BC%89"><span class="toc-text">4. 花式索引（整数数组索引 &#x2F; Advanced Indexing）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E5%B9%BF%E6%92%AD%E4%B8%8E%E7%B4%A2%E5%BC%95%EF%BC%88%E6%B3%A8%E6%84%8F%E5%BD%A2%E7%8A%B6%EF%BC%89"><span class="toc-text">5. 广播与索引（注意形状）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-gather-%E4%B8%8E-scatter%EF%BC%88%E6%8C%89%E7%B4%A2%E5%BC%95%E6%94%B6%E9%9B%86-%E5%86%99%E5%85%A5%EF%BC%8C%E9%80%82%E7%94%A8%E4%BA%8E%E9%AB%98%E7%BB%B4%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="toc-text">6. gather 与 scatter（按索引收集&#x2F;写入，适用于高维批量操作）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-index-select-take%EF%BC%88%E6%8C%89%E7%BB%B4%E5%BA%A6%E9%80%89%E6%8B%A9%EF%BC%89"><span class="toc-text">7. index_select &#x2F; take（按维度选择）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-masked-fill-where%EF%BC%88%E6%8E%A9%E7%A0%81%E8%B5%8B%E5%80%BC-%E6%9D%A1%E4%BB%B6%E9%80%89%E6%8B%A9%EF%BC%89"><span class="toc-text">8. masked_fill, where（掩码赋值 &#x2F; 条件选择）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-unsqueeze-squeeze-%E4%B8%8E-view-reshape%EF%BC%88%E7%BB%B4%E5%BA%A6%E6%8E%A7%E5%88%B6%EF%BC%89"><span class="toc-text">9. unsqueeze &#x2F; squeeze 与 view&#x2F;reshape（维度控制）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Ellipsis-%EF%BC%88%E7%9C%81%E7%95%A5%E5%8F%B7%EF%BC%89"><span class="toc-text">10. Ellipsis ...（省略号）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-%E5%A4%9A%E7%BB%B4%E8%BF%94%E5%9B%9E%E4%B8%8E%E7%BB%B4%E5%BA%A6%E6%8F%92%E5%85%A5%EF%BC%88%E4%BF%9D%E6%8C%81-%E4%B8%A2%E5%A4%B1%E7%BB%B4%E5%BA%A6%EF%BC%89"><span class="toc-text">11. 多维返回与维度插入（保持&#x2F;丢失维度）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-%E8%A7%86%E5%9B%BE%EF%BC%88view%EF%BC%89%E4%B8%8E-copy%EF%BC%88%E5%86%85%E5%AD%98-contiguous%EF%BC%89%E7%9B%B8%E5%85%B3%E6%B3%A8%E6%84%8F"><span class="toc-text">12. 视图（view）与 copy（内存&#x2F;contiguous）相关注意</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%EF%BC%88autograd%EF%BC%89%E7%9B%B8%E5%85%B3"><span class="toc-text">13. 反向传播（autograd）相关</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-%E5%B8%B8%E8%A7%81%E7%94%A8%E9%80%94%E4%B8%8E%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%AE%9E%E6%88%98%E7%89%87%E6%AE%B5%EF%BC%89"><span class="toc-text">14. 常见用途与模式（实战片段）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-%E8%BF%9B%E9%98%B6%EF%BC%9Aeinsum-%E4%BD%9C%E4%B8%BA%E7%81%B5%E6%B4%BB%E6%9B%BF%E4%BB%A3%EF%BC%88%E5%BD%93%E7%B4%A2%E5%BC%95%E5%92%8C-reshape-%E5%A4%AA%E7%B9%81%E7%90%90%EF%BC%89"><span class="toc-text">15. 进阶：einsum 作为灵活替代（当索引和 reshape 太繁琐）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E4%B8%8E%E5%BB%BA%E8%AE%AE"><span class="toc-text">16. 常见陷阱与建议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-%E4%B8%80%E5%BC%A0%E9%80%9F%E6%9F%A5%E5%B0%8F%E8%A1%A8%EF%BC%88%E5%B8%B8%E7%94%A8-API%EF%BC%89"><span class="toc-text">17. 一张速查小表（常用 API）</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/10/29/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/" title="【每日早报】"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://file.alapi.cn/60s/202510291761678902_head.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【每日早报】"/></a><div class="content"><a class="title" href="/2025/10/29/%E3%80%90%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E3%80%91/" title="【每日早报】">【每日早报】</a><time datetime="2025-10-28T16:00:00.000Z" title="发表于 2025-10-29 00:00:00">2025-10-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/22/changekey/" title="修改键盘F9为Home键"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="修改键盘F9为Home键"/></a><div class="content"><a class="title" href="/2025/10/22/changekey/" title="修改键盘F9为Home键">修改键盘F9为Home键</a><time datetime="2025-10-21T17:38:58.000Z" title="发表于 2025-10-22 01:38:58">2025-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/27/decodeapk/" title="反编译 APK"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/decodeapk.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="反编译 APK"/></a><div class="content"><a class="title" href="/2025/03/27/decodeapk/" title="反编译 APK">反编译 APK</a><time datetime="2025-03-26T23:02:58.000Z" title="发表于 2025-03-27 07:02:58">2025-03-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/01/justrecord/" title="有用的小知识"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/useful.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="有用的小知识"/></a><div class="content"><a class="title" href="/2025/03/01/justrecord/" title="有用的小知识">有用的小知识</a><time datetime="2025-03-01T01:53:07.000Z" title="发表于 2025-03-01 09:53:07">2025-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/10/nicetools/" title="好用的工具"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/tool.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="好用的工具"/></a><div class="content"><a class="title" href="/2025/01/10/nicetools/" title="好用的工具">好用的工具</a><time datetime="2025-01-10T01:53:07.000Z" title="发表于 2025-01-10 09:53:07">2025-01-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="footer_deal"><a class="deal_link" href="mailto:anzhiyu-c@qq.com" title="email"><i class="anzhiyufont anzhiyu-icon-envelope"></i></a><a class="deal_link" target="_blank" rel="noopener" href="https://weibo.com/u/6378063631" title="微博"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a><a class="deal_link" target="_blank" rel="noopener" href="https://www.facebook.com/profile.php?id=100092208016287&amp;sk=about" title="facebook"><i class="anzhiyufont anzhiyu-icon-facebook1"></i></a><a class="deal_link" href="/atom.xml" title="RSS"><i class="anzhiyufont anzhiyu-icon-rss"></i></a><img class="footer_mini_logo" title="返回顶部" alt="返回顶部" onclick="anzhiyu.scrollToDest(0, 500)" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/bamboo.jpg" size="50px"/><a class="deal_link" target="_blank" rel="noopener" href="https://github.com/climbingmouse" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="deal_link" target="_blank" rel="noopener" href="https://space.bilibili.com/372204786" title="Bilibili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a><a class="deal_link" target="_blank" rel="noopener" href="https://v.douyin.com/DwCpMEy/" title="抖音"><i class="anzhiyufont anzhiyu-icon-tiktok"></i></a><a class="deal_link" href="/copyright" title="CC"><i class="anzhiyufont anzhiyu-icon-copyright-line"></i></a></div><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/WH-%E4%B8%8A%E7%8F%AD%E6%91%B8%E9%B1%BC%7E-grey.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Bamboo" target="_blank">Bamboo</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">7</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=8283048318&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Decode/" style="font-size: 0.88rem;">Decode<sup>1</sup></a><a href="/tags/Pytorch/" style="font-size: 0.88rem;">Pytorch<sup>1</sup></a><a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 0.88rem;">人工智能<sup>2</sup></a><a href="/tags/%E5%81%A5%E5%BA%B7/" style="font-size: 0.88rem;">健康<sup>1</sup></a><a href="/tags/%E5%91%BD%E4%BB%A4/" style="font-size: 0.88rem;">命令<sup>1</sup></a><a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 0.88rem;">学习<sup>1</sup></a><a href="/tags/%E5%AE%89%E5%8D%93/" style="font-size: 0.88rem;">安卓<sup>1</sup></a><a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 0.88rem;">工具<sup>1</sup></a><a href="/tags/%E5%BC%A0%E9%87%8F/" style="font-size: 0.88rem;">张量<sup>1</sup></a><a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 0.88rem;">技巧<sup>2</sup></a><a href="/tags/%E6%96%87%E7%AB%A0/" style="font-size: 0.88rem;">文章<sup>1</sup></a><a href="/tags/%E6%96%B9%E6%B3%95/" style="font-size: 0.88rem;">方法<sup>1</sup></a><a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 0.88rem;">架构<sup>1</sup></a><a href="/tags/%E6%A8%A1%E5%9E%8B/" style="font-size: 0.88rem;">模型<sup>1</sup></a><a href="/tags/%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5/" style="font-size: 0.88rem;">每日早报<sup>1</sup></a><a href="/tags/%E8%BF%90%E7%AE%97/" style="font-size: 0.88rem;">运算<sup>1</sup></a><a href="/tags/%E9%9A%8F%E6%89%8B%E4%B8%80%E8%AE%B0/" style="font-size: 0.88rem;">随手一记<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8265688977" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://music.163.com/playlist?id=8265688977&amp;uct2=U2FsdGVkX1+ewTfGi5yW+TQKwEm0R7XfhCEoYO2cn5Y=&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.cbd.int/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/11/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Bamboo 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/11/2023 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      if (img != null) {
+        img.src = "https://blog-vanh.oss-cn-hangzhou.aliyuncs.com/image/WH-%E4%B8%8B%E7%8F%AD%E4%BA%86-grey.svg";
+        img.title = "下班了就该开开心心的玩耍，嘿嘿~";
+        img.alt = "下班了就该开开心心的玩耍，嘿嘿~";
+      }
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const getGiscusTheme = theme => {
+    return theme === 'dark' ? 'dark' : 'light'
+  }
+
+  const loadGiscus = () => {
+    const config = Object.assign({
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'ClimbingMouse/comment-giscus',
+      'data-repo-id': 'R_kgDOOJtEjA',
+      'data-category-id': 'DIC_kwDOOJtEjM4CoHju',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true
+    },{"data-lang":"zh-CN","data-mapping":"pathname","data-category":"General","data-input-position":"top"})
+
+    const ele = document.createElement('script')
+    for (let key in config) {
+      ele.setAttribute(key, config[key])
+    }
+    document.getElementById('giscus-wrap').appendChild(ele)
+  }
+
+  const changeGiscusTheme = theme => {
+    const sendMessage = message => {
+      const iframe = document.querySelector('iframe.giscus-frame')
+      if (!iframe) return
+      iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+    }
+
+    sendMessage({
+      setConfig: {
+        theme: getGiscusTheme(theme)
+      }
+    });
+  }
+
+  anzhiyu.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
