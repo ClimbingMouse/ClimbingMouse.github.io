@@ -595,31 +595,28 @@
 <!-- optional -->
 
   <script type="module">
-  const el = document.getElementById('artalk_container');
-  util.viewportLazyload(el, load_artalk, false);
+  const el = document.querySelector('#comments #giscus');
+  util.viewportLazyload(el, load_discus, false);
 
-  function load_artalk() {
+  function load_discus() {
     if (!el) return;
-    utils.css('https://unpkg.com/artalk@2.7/dist/Artalk.css');
-    utils.js('https://unpkg.com/artalk@2.7/dist/Artalk.js', {defer: true}).then(function () {
-      // 监听 Artalk 事件
-      // FIXME: Artalk开启了懒加载会导致评论输入预览框里的图也变成data-src，导致看不到图
-      // Artalk.use((ctx) => {
-      //   ctx.on('list-loaded', () => window.lazyLoadInstance?.update())
-      // })
-      const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
-      const artalk = Artalk.init({
-        el: '#artalk_container',
-        pageKey: path,
-        pageTitle: '音乐馆',
-        server: 'http://117.72.159.107:23366/',
-        site: 'Bamboo blog',
-        darkMode: 'auto',
-        
-      });
-    });
+    try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      const script = document.createElement('script');
+      script.async = true;
+      for (const key of Object.keys(el.attributes)) {
+        const attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
   }
 </script>
+
 
 
 
